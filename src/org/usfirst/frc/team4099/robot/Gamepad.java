@@ -1,7 +1,9 @@
 /**
  * Gamepad class. For use for the Logitech Gamepad for FRC.
- * Usage: Gamepad gp = new Gamepad
+ * Usage: Gamepad gp = new Gamepad(port);
  * 
+ * Defines common functionality such as getting the button presses
+ *     and axis values.
  */
 
 package org.usfirst.frc.team4099.robot;
@@ -11,11 +13,11 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Gamepad extends Joystick {
 	
 	/* Joystick Axes */
-	public static final int LEFT_X_AXIS = 1;
-	public static final int LEFT_Y_AXIS = 2;
+	public static final int LEFT_X_AXIS = 0;
+	public static final int LEFT_Y_AXIS = 1;
 	
-	public static final int RIGHT_X_AXIS = 3;
-	public static final int RIGHT_Y_AXIS = 4;
+	public static final int RIGHT_X_AXIS = 4;
+	public static final int RIGHT_Y_AXIS = 5;
 	
 	/* Joystick Click (Buttons) */
 	public static final int LEFT_JOYSTICK_BUTTON = 11;
@@ -27,71 +29,87 @@ public class Gamepad extends Joystick {
 	public static final int A_BUTTON = 2;
 	public static final int B_BUTTON = 3;
 	
+	/* DPAD */
+	// although the DPAD is known as an "axis", it only gives +/-1 readings,
+	// essentially making it a button. here, we get the axis numbers.
 	public static final int DPAD_HORIZONTAL = 5;
 	public static final int DPAD_VERTICAL = 6;
 	
-	/* Shoulder Buttons */
+	/* Shoulder Buttons (Sit above the trigger buttons) */
 	public static final int LEFT_SHOULDER_BUTTON = 5;
 	public static final int RIGHT_SHOULDER_BUTTON = 6;
 	
-	// TODO: Figure out what these do!
+	/* Trigger buttons */
 	public static final int LEFT_TRIGGER_BUTTON = 7;
 	public static final int RIGHT_TRIGGER_BUTTON = 8;
 	
-	
+
 	public Gamepad(int port) {
 		super(port);
 	}
 	
-	private boolean isJoelHot() {
-		return true;
-	}
-	
-	private boolean isDPadUp() {
+	// treat these as buttons
+	public boolean isDPadUpPressed() {
 		return this.getRawAxis(DPAD_VERTICAL) < -0.5;
 	}
 	
-	private boolean isDPadDown() {
+	public boolean isDPadDownPressed() {
 		return this.getRawAxis(DPAD_VERTICAL) > 0.5;
 	}
 	
-	private boolean isDPadLeft() {
+	public boolean isDPadLeftPressed() {
 		return this.getRawAxis(DPAD_HORIZONTAL) < -0.5;
 	}
 	
-	private boolean isDPadRight() {
+	public boolean isDPadRightPressed() {
 		return this.getRawAxis(DPAD_HORIZONTAL) > 0.5;
 	}
 	
-	private double getLeftHorizontalAxis() {
+	public double getLeftHorizontalAxis() {
 		return this.getRawAxis(LEFT_X_AXIS);
 	}
 	
-	private double getRightHorizontalAxis() {
+	public double getRightHorizontalAxis() {
 		return this.getRawAxis(RIGHT_X_AXIS);
 	}
 	
-	private double getLeftVerticalAxis() {
+	public double getLeftVerticalAxis() {
 		return -this.getRawAxis(LEFT_Y_AXIS);
 	}
 	
-	private double getRightVerticalAxis() {
+	public double getRightVerticalAxis() {
 		return -this.getRawAxis(RIGHT_Y_AXIS);
 	}
 	
-	private boolean getAButton() {
+	public boolean isAButtonPressed() {
 		return this.getRawButton(A_BUTTON);
 	}
 	
-	private boolean getBButton() {
+	public boolean getBButtonPressed() {
 		return this.getRawButton(B_BUTTON);
 	}
 	
-	private boolean getXButton() {
+	public boolean getXButtonPressed() {
 		return this.getRawButton(X_BUTTON);
 	}
 	
-	private boolean getYButton() {
+	public boolean getYButtonPressed() {
 		return this.getRawButton(Y_BUTTON);
+	}
+	
+	public boolean isLeftTriggerPressed() {
+		return this.getRawButton(LEFT_TRIGGER_BUTTON);
+	}
+	
+	public boolean isRightTriggerPressed() {
+		return this.getRawButton(RIGHT_TRIGGER_BUTTON);
+	}
+	
+	public boolean isLeftShoulderPressed() {
+		return this.getRawButton(LEFT_SHOULDER_BUTTON);
+	}
+	
+	public boolean isRightShoulderPressed() {
+		return this.getRawButton(RIGHT_SHOULDER_BUTTON);
 	}
 }
