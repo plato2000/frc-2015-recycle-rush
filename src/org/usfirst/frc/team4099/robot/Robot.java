@@ -1,11 +1,7 @@
 package org.usfirst.frc.team4099.robot;
 
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
@@ -24,15 +20,15 @@ public class Robot extends SampleRobot {
     int imgCount = 0;
     
     public Robot() {
-        robotDrive = new RobotDrive(0, 1);
+        robotDrive = new RobotDrive(0, 1, 6, 7);
         robotDrive.setExpiration(0.1);
     }
     
     public void robotinit() {
-    	for (int i=2; i<=7; i++) {
+    	/*for (int i=2; i<=7; i++) {
     		talons.add(new Talon(i));
     		System.out.println(talons.size());
-    	}
+    	}*/
     	System.out.println("Robot initialized...");
     }
     
@@ -62,28 +58,26 @@ public class Robot extends SampleRobot {
 				ColorImage img;
 				try {
 					img = camera.getImage();
-					File output = new File("/home/admin/savedimgs/img-" + imgCount + ".jpg");
-					ImageIO.write((RenderedImage) img, "jpg", output);
+					img.write("/home/admin/savedimgs/img-" + imgCount + ".jpg");
 					imgCount++;
 				} catch (NIVisionException e) {
 					System.out.println("Could not take image.");
-				} catch (IOException e) {
-					System.out.println("Count not save image.");
 				}
 			}
 
 			if (isSlideDrive) {
-				for (int i = 2; i <= 7; i++) {
+				/*for (int i = 2; i <= 7; i++) {
 					if (i % 2 == 0) {
 						talons.get(i - 2).set(controller.getLeftVerticalAxis());
 					} else {
 						talons.get(i - 2)
 								.set(-controller.getLeftVerticalAxis());
 					}
-				}
+				}*/
 			} else {
                 /* will be arcade drive */
-        		robotDrive.arcadeDrive(controller.getLeftVerticalAxis(), controller.getLeftHorizontalAxis());
+        		robotDrive.arcadeDrive(-controller.getLeftHorizontalAxis() / 2.0,
+        				controller.getLeftVerticalAxis() / 2.0);
         	}
 			
 			if (controller.getYButtonPressed()) {
