@@ -5,16 +5,19 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class SlideDrive {
-    private SpeedController sliderTalon;
+    private SpeedController sliderTalonFront;
+    private SpeedController sliderTalonRear;
     private RobotDrive arcadeDrive;
 
-    public SlideDrive(RobotDrive arcadeDrive, int slider) {
+    public SlideDrive(RobotDrive arcadeDrive, int sliderFront, int sliderRear) {
         this.arcadeDrive = arcadeDrive;
-        this.sliderTalon = new Talon(slider);
+        this.sliderTalonFront = new Talon(sliderFront);
+        this.sliderTalonRear = new Talon(sliderRear);
     }
 
     private void slide(double speed) {
-        sliderTalon.set(speed);
+        sliderTalonFront.set(speed);
+        sliderTalonRear.set(speed);
     }
 
     public void slideDrive(double forward, double turn, double strafe) {

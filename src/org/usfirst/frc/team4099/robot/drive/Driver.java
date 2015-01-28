@@ -15,11 +15,12 @@ public class Driver {
 	public static final int REAR_LEFT_MOTOR = 1;
 	public static final int FRONT_RIGHT_MOTOR = 6;
 	public static final int REAR_RIGHT_MOTOR = 7;
-    public static final int SLIDE_MOTOR = 2;
+    public static final int FRONT_SLIDE_MOTOR = 2;
+    public static final int REAR_SLIDE_MOTOR = 3;
 	
 	public Driver() {
         arcadeDrive = new RobotDrive(FRONT_LEFT_MOTOR, REAR_LEFT_MOTOR, FRONT_RIGHT_MOTOR, REAR_RIGHT_MOTOR);
-        slideDrive = new SlideDrive(arcadeDrive, SLIDE_MOTOR);
+        slideDrive = new SlideDrive(arcadeDrive, FRONT_SLIDE_MOTOR, REAR_SLIDE_MOTOR);
         arcadeDrive.setExpiration(0.1);
 	}
 	
