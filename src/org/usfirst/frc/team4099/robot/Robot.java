@@ -20,7 +20,6 @@ public class Robot extends SampleRobot {
 	public static final int REAR_LEFT_MOTOR = 1;
 	public static final int FRONT_RIGHT_MOTOR = 6;
 	public static final int REAR_RIGHT_MOTOR = 7;
-	public static final int SLIDER_MOTOR = 2;
 
 	private RobotCamera camera = new RobotCamera(CAMERA_IP, SERVO_YAW, SERVO_PITCH);
 	private Driver robotDrive;
@@ -31,8 +30,7 @@ public class Robot extends SampleRobot {
     	robotDrive = new Driver(FRONT_LEFT_MOTOR,
     							REAR_LEFT_MOTOR,
     							FRONT_RIGHT_MOTOR,
-    							REAR_RIGHT_MOTOR,
-    							SLIDER_MOTOR);
+    							REAR_RIGHT_MOTOR);
 
         robotDrive.setExpiration(0.1);
     }
@@ -76,7 +74,6 @@ public class Robot extends SampleRobot {
 			// switch drive mode
 			if (controller.isYButtonPressed()) {
 				System.out.println("Current Drive Mode: " + robotDrive.getCurrentDriveMode());
-				robotDrive.toggleDriveMode();
 			}
 
 			// wait for motor update
