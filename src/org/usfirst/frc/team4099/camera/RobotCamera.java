@@ -83,7 +83,7 @@ public class RobotCamera {
 		ColorImage img;
 		try {
 			img = camera.getImage();
-			img.write("/home/admin/savedimgs/img-" + imgCount + ".jpg");
+			img.write("/home/admin/savedimgs/img-" + imgCount + "-" + System.currentTimeMillis() + ".jpg");
 			imgCount++;
 		} catch (NIVisionException e) {
 			System.out.println("Could not take image.");

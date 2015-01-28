@@ -117,12 +117,20 @@ public class Gamepad extends Joystick {
 	}
 	
 	public boolean isLeftTriggerPressed() {
-		return this.getRawButton(LEFT_TRIGGER_AXIS);
+		return this.getLeftTrigger() > 0.2;
 	}
-	
+
 	public boolean isRightTriggerPressed() {
-		return this.getRawButton(RIGHT_TRIGGER_AXIS);
+        return this.getRightTrigger() > 0.2;
 	}
+
+    public double getLeftTrigger() {
+        return this.getRawAxis(LEFT_TRIGGER_AXIS);
+    }
+
+    public double getRightTrigger() {
+        return this.getRawAxis(RIGHT_TRIGGER_AXIS);
+    }
 	
 	public boolean isLeftShoulderPressed() {
 		return this.getRawButton(LEFT_SHOULDER_BUTTON);

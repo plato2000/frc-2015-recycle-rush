@@ -1,65 +1,56 @@
 package org.usfirst.frc.team4099.robot;
 
-import java.util.ArrayList;
-
 import org.usfirst.frc.team4099.camera.RobotCamera;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
 
 import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 
 
 public class Robot extends SampleRobot {
 	public static final String CAMERA_IP = "10.40.99.11";
-	public static final int SERVO_YAW = 10;
-	public static final int SERVO_PITCH = 11;
-	
-	public static final int FRONT_LEFT_MOTOR = 0;
-	public static final int REAR_LEFT_MOTOR = 1;
-	public static final int FRONT_RIGHT_MOTOR = 6;
-	public static final int REAR_RIGHT_MOTOR = 7;
+	private RobotCamera camera = new RobotCamera(CAMERA_IP, YAW_SERVO, PITCH_SERVO);
 
-	private RobotCamera camera = new RobotCamera(CAMERA_IP, SERVO_YAW, SERVO_PITCH);
+	public static final int YAW_SERVO = 10;
+	public static final int PITCH_SERVO = 11;
+
 	private Driver robotDrive;
     Gamepad controller = new Gamepad(0);
-    ArrayList<Talon> talons = new ArrayList<Talon>();
+
+    public static final String DEBUG_FILE = "/tmp/debug.txt";
+    public static Debug debug = new Debug(DEBUG_FILE);
     
     public Robot() {
-    	robotDrive = new Driver(FRONT_LEFT_MOTOR,
-    							REAR_LEFT_MOTOR,
-    							FRONT_RIGHT_MOTOR,
-    							REAR_RIGHT_MOTOR);
-
-        robotDrive.setExpiration(0.1);
+    	robotDrive = new Driver();
     }
     
     public void robotinit() {
-    	System.out.println("Robot initialized...");
+    	debug.println("Robot initialized...");
     }
     
     public void disabled() {
-    	System.out.println("Robot disabled...");
+    	debug.println("Robot disabled...");
     }
 
     public void autonomous() {
-    	System.out.println("Entering autonomous mode...");
+    	debug.println("Entering autonomous mode...");
+        robotDrive.enterAutonomousMode();
     	while (isAutonomous() && isEnabled()) {
     		
     	}
     }
     
     public void operatorControl() {
-		robotDrive.setSafetyEnabled(true);
-		System.out.println("Entering teleoperated mode...");
+        robotDrive.enterTeleoperatedMode();
+		debug.println("Entering teleoperated mode...");
 
 		while (isOperatorControl() && isEnabled()) {
 			// *******************
 			// ** DRIVING ROBOT **
 			// *******************
 			robotDrive.drive(controller);
-			
+
 			// moving camera
 			camera.moveCamera(controller);
 
@@ -73,7 +64,8 @@ public class Robot extends SampleRobot {
 			}
 			// switch drive mode
 			if (controller.isYButtonPressed()) {
-				System.out.println("Current Drive Mode: " + robotDrive.getCurrentDriveMode());
+				debug.println("Current Drive Mode: " + robotDrive.getCurrentDriveMode());
+                robotDrive.toggleDriveMode();
 			}
 
 			// wait for motor update
@@ -82,6 +74,6 @@ public class Robot extends SampleRobot {
     }
     
     public void test() {
-    	System.out.println("Entering testing mode...");
+    	debug.println("Entering testing mode...");
     }
 }
