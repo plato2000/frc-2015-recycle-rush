@@ -16,7 +16,7 @@ public class Robot extends SampleRobot {
 	public static final int PITCH_SERVO = 11;
 
 	private Driver robotDrive;
-    Gamepad controller = new Gamepad(0);
+    private Gamepad controller = new Gamepad(0);
 
     public static final String DEBUG_FILE = "/tmp/debug.txt";
     public static Debug debug = new Debug(DEBUG_FILE);
