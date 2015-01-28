@@ -1,14 +1,14 @@
 package org.usfirst.frc.team4099.robot.drive;
 
 import org.usfirst.frc.team4099.control.Gamepad;
-import org.usfirst.frc.team4099.robot.drive.SlideDrive;
+import org.usfirst.frc.team4099.robot.drive.SlideDriver;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class Driver {
 	private DriveMode currentMode = DriveMode.ARCADE;
     private RobotDrive arcadeDrive;
-    private SlideDrive slideDrive;
+    private SlideDriver slideDrive;
 
     public static final double REDUCTION_FACTOR = 2.0;
 	public static final int FRONT_LEFT_MOTOR = 0;
@@ -19,7 +19,7 @@ public class Driver {
 	
 	public Driver() {
         arcadeDrive = new RobotDrive(FRONT_LEFT_MOTOR, REAR_LEFT_MOTOR, FRONT_RIGHT_MOTOR, REAR_RIGHT_MOTOR);
-        slideDrive = new SlideDrive(arcadeDrive, SLIDE_MOTOR);
+        slideDrive = new SlideDriver(arcadeDrive, SLIDE_MOTOR);
         arcadeDrive.setExpiration(0.1);
 	}
 	

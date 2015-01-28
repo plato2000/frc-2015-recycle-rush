@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
 
-public class SlideDrive {
+public class SlideDriver {
     private SpeedController sliderTalon;
     private RobotDrive arcadeDrive;
 
-    public SlideDrive(RobotDrive arcadeDrive, int slider) {
+    public SlideDriver(RobotDrive arcadeDrive, int slider) {
         this.arcadeDrive = arcadeDrive;
         this.sliderTalon = new Talon(slider);
     }
