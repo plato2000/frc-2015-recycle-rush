@@ -34,24 +34,9 @@ public class Robot extends SampleRobot {
 
     public void autonomous() {
     	debug.println("Entering autonomous mode...");
-        robotDrive.enterAutonomousMode();
-    	while (isAutonomous() && isEnabled()) {
-    		String dir = "";
-    		while (true)
-    		{
-    			dir = camera.getDirection();
-    			if (dir.equals("LEFT")) {
-    				//move left
-    			} else if (dir.equals("RIGHT")) {
-    				//move right
-    			} else if (dir.equals("NO YELLOW BOX")) {
-    				//move away, there is no yellow box in view
-    				break;
-    			} else if (dir.equals("FORWARD")) {
-    				//move forward to pick up box
-    				break;
-    			}
-    		}
+        robotDrive.enterAutonomousMode(camera);
+        while (isAutonomous() && isEnabled()) {
+
     	}
     }
     
