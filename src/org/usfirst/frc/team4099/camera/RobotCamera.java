@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4099.camera;
 
 import org.usfirst.frc.team4099.control.Gamepad;
+import org.usfirst.frc.team4099.robot.Robot;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.image.ColorImage;
@@ -30,8 +31,8 @@ public class RobotCamera {
 	
 	public void cameraInit() {
 		// set the servos to the middle
-		yawServo.set(INIT_PITCH);
-		pitchServo.set(INIT_YAW);
+		yawServo.set(INIT_YAW);
+		pitchServo.set(INIT_PITCH);
 	}
 	
 	public void limitAngles() {
@@ -49,30 +50,26 @@ public class RobotCamera {
 	}
 	
 	public void updateCameraAngles() {
-		pitchServo.set(currentYaw);
-		yawServo.set(currentPitch);
+		pitchServo.set(currentPitch);
+		yawServo.set(currentYaw);
 	}
 	
 	public void moveCamera(Gamepad control) {
 		limitAngles();
 		if (control.isDPadUpPressed()) {
-			if (currentPitch < 1.0)
-				currentPitch += MOVE_SPEED;
+            currentPitch -= MOVE_SPEED;
 		}
 
 		if (control.isDPadDownPressed()) {
-			if (currentPitch > 0.0)
-				currentPitch -= MOVE_SPEED;
+            currentPitch += MOVE_SPEED;
 		}
 		
 		if (control.isDPadRightPressed()) {
-			if (currentYaw > 1.0)
-				currentYaw += MOVE_SPEED;
+            currentYaw += MOVE_SPEED;
 		}
 		
 		if (control.isDPadLeftPressed()) {
-			if (currentYaw < 0.0)
-				currentYaw -= MOVE_SPEED;
+            currentYaw -= MOVE_SPEED;
 		}
 
 		limitAngles();

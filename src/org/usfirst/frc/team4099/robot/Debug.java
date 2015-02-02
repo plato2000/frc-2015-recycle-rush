@@ -23,7 +23,7 @@ public class Debug {
 
     public void println(String s) {
         try {
-            bw.write(s);
+            bw.write(s + "\n");
             bw.flush();
         } catch (IOException e) {};
     }

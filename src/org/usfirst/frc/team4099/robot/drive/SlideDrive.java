@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4099.robot.drive;
 
+import org.usfirst.frc.team4099.robot.Robot;
+
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -21,6 +23,7 @@ public class SlideDrive {
     }
 
     public void slideDrive(double forward, double turn, double strafe) {
+        Robot.debug.println("trying to move");
         arcadeDrive.arcadeDrive(forward, turn);
         this.slide(strafe);
     }
