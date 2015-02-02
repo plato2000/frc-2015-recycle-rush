@@ -68,3 +68,4 @@ Video
 .metadata
 *.iml
 *.ipr
+/bin/
