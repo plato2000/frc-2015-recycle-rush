@@ -23,8 +23,19 @@ public class SlideDrive {
     }
 
     public void slideDrive(double forward, double turn, double strafe) {
-        Robot.debug.println("trying to move");
-        arcadeDrive.arcadeDrive(forward, turn);
-        this.slide(strafe);
+        if (Math.abs(forward) < 0.4) {
+        	forward = 0;
+        }
+        if (Math.abs(turn) < 0.5) {
+        	turn = 0;
+        }
+        
+    	arcadeDrive.arcadeDrive(forward, turn);
+        //Robot.debug.println("" + strafe);
+        if (Math.abs(strafe) > 0.3) {
+           this.slide(strafe);
+        } else {
+        	this.slide(0);
+        }
     }
 }
