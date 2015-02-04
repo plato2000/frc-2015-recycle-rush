@@ -1,25 +1,17 @@
 package org.usfirst.frc.team4099.robot.drive;
 
-import org.usfirst.frc.team4099.robot.Robot;
+//import org.usfirst.frc.team4099.robot.Robot;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
 
-<<<<<<< HEAD:src/org/usfirst/frc/team4099/robot/drive/SlideDriver.java
-public class SlideDriver {
-    private SpeedController sliderTalon;
-    private RobotDrive arcadeDrive;
-
-    public SlideDriver(RobotDrive arcadeDrive, int slider) {
-=======
 public class SlideDrive {
     private SpeedController sliderTalonFront;
     private SpeedController sliderTalonRear;
     private RobotDrive arcadeDrive;
 
     public SlideDrive(RobotDrive arcadeDrive, int sliderFront, int sliderRear) {
->>>>>>> FETCH_HEAD:src/org/usfirst/frc/team4099/robot/drive/SlideDrive.java
         this.arcadeDrive = arcadeDrive;
         this.sliderTalonFront = new Talon(sliderFront);
         this.sliderTalonRear = new Talon(sliderRear);
@@ -31,8 +23,19 @@ public class SlideDrive {
     }
 
     public void slideDrive(double forward, double turn, double strafe) {
-        Robot.debug.println("trying to move");
-        arcadeDrive.arcadeDrive(forward, turn);
-        this.slide(strafe);
+        if (Math.abs(forward) < 0.4) {
+        	forward = 0;
+        }
+        if (Math.abs(turn) < 0.5) {
+        	turn = 0;
+        }
+        
+    	arcadeDrive.arcadeDrive(forward, turn);
+        //Robot.debug.println("" + strafe);
+        if (Math.abs(strafe) > 0.3) {
+           this.slide(strafe);
+        } else {
+        	this.slide(0);
+        }
     }
 }
