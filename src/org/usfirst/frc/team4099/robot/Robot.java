@@ -10,10 +10,9 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends SampleRobot {
 	public static final String CAMERA_IP = "10.40.99.11";
+	public static final int YAW_SERVO = 8;
+	public static final int PITCH_SERVO = 9;
 	private RobotCamera camera = new RobotCamera(CAMERA_IP, YAW_SERVO, PITCH_SERVO);
-
-	public static final int YAW_SERVO = 10;
-	public static final int PITCH_SERVO = 11;
 
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
@@ -60,12 +59,14 @@ public class Robot extends SampleRobot {
 
 			// take photos
 			if (controller.isAButtonPressed()) {
+                Timer.delay(1.0);
 				camera.takePhoto();
 			}
 			// switch drive mode
 			if (controller.isYButtonPressed()) {
-				debug.println("Current Drive Mode: " + robotDrive.getCurrentDriveMode());
+                Timer.delay(1.0);
                 robotDrive.toggleDriveMode();
+				debug.println("Current Drive Mode: " + robotDrive.getCurrentDriveMode());
 			}
 
 			// wait for motor update

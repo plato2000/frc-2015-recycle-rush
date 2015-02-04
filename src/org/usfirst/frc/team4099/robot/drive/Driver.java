@@ -60,7 +60,7 @@ public class Driver {
 		switch (currentMode) {
 		case ARCADE:
 			arcadeDrive.arcadeDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
-                                    controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
+                                    -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
 			break;
 
 		case SLIDE:
@@ -79,7 +79,10 @@ public class Driver {
                     slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
                                           controller.getRightTrigger() / REDUCTION_FACTOR,
                                           controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
-
+                else
+                    slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
+                                          0.0,
+                                          controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
             } else {
                     slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
                                           0.0,
