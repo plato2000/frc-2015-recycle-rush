@@ -6,9 +6,10 @@ import org.usfirst.frc.team4099.control.Gamepad;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class Driver {
-	private DriveMode currentMode = DriveMode.SLIDE;
-    private RobotDrive arcadeDrive;
-    private SlideDrive slideDrive;
+
+    protected DriveMode currentMode = DriveMode.SLIDE;
+    protected RobotDrive arcadeDrive;
+    protected SlideDrive slideDrive;
 
     public static final double REDUCTION_FACTOR = 1.5;
 	public static final int FRONT_LEFT_MOTOR = 0;
@@ -43,25 +44,6 @@ public class Driver {
 			break;
 		}
 	}
-
-    public void enterAutonomousMode(RobotCamera camera) {
-		String dir = "";
-		while (true)
-		{
-			dir = camera.getDirection();
-			if (dir.equals("LEFT")) {
-				slideDrive.slideDrive(0,0,-.5/REDUCTION_FACTOR);
-			} else if (dir.equals("RIGHT")) {
-				slideDrive.slideDrive(0,0,.5/REDUCTION_FACTOR);
-			} else if (dir.equals("NO YELLOW BOX")) {
-				//move away, there is no yellow box in view
-				break;
-			} else if (dir.equals("FORWARD")) {
-				//move forward to pick up box
-				break;
-			}
-		}
-    }
 
     public void enterTeleoperatedMode() {
         this.arcadeDrive.setSafetyEnabled(true);

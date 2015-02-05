@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4099.robot;
 
+import org.usfirst.frc.team4099.autonomous.AutoDriver;
 import org.usfirst.frc.team4099.camera.RobotCamera;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
@@ -15,6 +16,7 @@ public class Robot extends SampleRobot {
 	private RobotCamera camera = new RobotCamera(CAMERA_IP, YAW_SERVO, PITCH_SERVO);
 
 	private Driver robotDrive;
+	private AutoDriver autoDrive;
     private Gamepad controller = new Gamepad(0);
 
     public static final String DEBUG_FILE = "/tmp/debug.txt";
@@ -22,6 +24,7 @@ public class Robot extends SampleRobot {
     
     public Robot() {
     	robotDrive = new Driver();
+    	autoDrive = new AutoDriver(camera);
     }
     
     public void robotinit() {
@@ -34,9 +37,9 @@ public class Robot extends SampleRobot {
 
     public void autonomous() {
     	debug.println("Entering autonomous mode...");
-        robotDrive.enterAutonomousMode(camera);
+        autoDrive.enterAutonomousMode();
         while (isAutonomous() && isEnabled()) {
-
+        	autoDrive.autoDrive();
     	}
     }
     
