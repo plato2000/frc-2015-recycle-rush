@@ -121,9 +121,10 @@ public class RobotCamera {
 		return cmyk;
 	}
 
-	public String getDirection() {
+	public Direction getDirection() {
 		ColorImage image;
-		String command = "";
+		Direction dir;
+
 		try {
 			image = camera.getImage();
 			YCENTER = image.getHeight() / 2;
@@ -174,27 +175,28 @@ public class RobotCamera {
 			if (countYellowsLeft >= 35 && countYellowsRight >= 35) {
 				yellow = true;
 				// break;
-				return "Forward";
+				return Direction.FORWARD;
 			} else if (countYellowsLeft >= 35 && countYellowsRight < 35) {
 				/*
 				 * System.out.println(countYellowsLeft);
 				 * System.out.println(countYellowsRight);
 				 * System.out.println("Move left"); break;
 				 */
-				return "Left";
+				return Direction.LEFT;
 			} else if (countYellowsLeft >= 35 && countYellowsRight < 35) {
 				/*
 				 * System.out.println(countYellowsLeft);
 				 * System.out.println(countYellowsRight);
 				 * System.out.println("Move right"); break;
 				 */
-				return "Right";
+				return Direction.RIGHT;
 			}
 			fromLeft += 10;
 			fromRight -= 10;
 			countYellowsLeft = 0;
 			countYellowsRight = 0;
 		}
-		return "No Yellow Box";
+
+		return Direction.NO_BOX;
 	}
 }
