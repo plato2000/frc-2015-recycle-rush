@@ -2,13 +2,18 @@ package org.usfirst.frc.team4099.autonomous;
 
 import org.usfirst.frc.team4099.camera.*;
 import org.usfirst.frc.team4099.robot.drive.Driver;
+import org.usfirst.frc.team4099.robot.drive.SlideDrive;
+
+import edu.wpi.first.wpilibj.RobotDrive;
 
 
-public class AutoDriver extends Driver {
-	RobotCamera camera;
+public class AutoDrive {
+	private RobotCamera camera;
+	private SlideDrive slideDrive;
 	
-	public void enterAutonomousMode() {
-		this.arcadeDrive.setSafetyEnabled(true);
+	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
+		this.camera = camera;
+		this.slideDrive = slideDrive;
 	}
 	
 	public void autoDrive() {
@@ -16,10 +21,10 @@ public class AutoDriver extends Driver {
 		dir = camera.getDirection();
 		switch(dir) {
 			case LEFT:
-				slideDrive.slideDrive(0,0,-.5/REDUCTION_FACTOR);
+				slideDrive.slideDrive(0,0,-.5/Driver.REDUCTION_FACTOR);
 				break;
 			case RIGHT:
-				slideDrive.slideDrive(0,0,.5/REDUCTION_FACTOR);
+				slideDrive.slideDrive(0,0,.5/Driver.REDUCTION_FACTOR);
 				break;
 			case NO_BOX:
 				//move away, there is no yellow box in view
@@ -30,10 +35,5 @@ public class AutoDriver extends Driver {
 				//slideDrive.slideDrive(.5 / REDUCTION_FACTOR, 0, 0);
 				break;
 		}
-	}
-	
-	public AutoDriver(RobotCamera camera) {
-		super();
-		this.camera = camera;
 	}
 }
