@@ -37,6 +37,7 @@ public class Elevator {
 				}
 				this.leftElevatorTalon.set(0);
 				this.rightElevatorTalon.set(0);
+				this.encoder.reset();
 			}
 		}
 		/*
