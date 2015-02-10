@@ -33,7 +33,7 @@ public class Gamepad extends Joystick {
 	public static final int Y_BUTTON = 4;
 	
 	/* DPAD */
-	public static final int DPAD_POV = 0;
+	public static final int DPAD_POV = 1;
 	public static final int DPAD_NORTH = 0;
 	public static final int DPAD_NORTHEAST = 45;
 	public static final int DPAD_EAST = 90;
