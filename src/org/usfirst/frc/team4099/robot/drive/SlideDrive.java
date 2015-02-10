@@ -27,6 +27,7 @@ public class SlideDrive {
 	}
 
 	public void slideDrive(double forward, double turn, double strafe) {
+		strafe = -strafe;
 		if (Math.abs(forward) < 0.4) {
 			forward = 0;
 		}

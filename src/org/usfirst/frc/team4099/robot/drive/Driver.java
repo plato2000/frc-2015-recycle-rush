@@ -20,8 +20,6 @@ public class Driver {
 	public static final int REAR_RIGHT_MOTOR = 3;
     public static final int FRONT_SLIDE_MOTOR = 4;
     public static final int REAR_SLIDE_MOTOR = 5;
-    public static final int LEFT_ELEVATOR = 6;
-    public static final int RIGHT_ELEVATOR = 7;
 	
 	public Driver(RobotCamera cam) {
         arcadeDrive = new RobotDrive(FRONT_LEFT_MOTOR, REAR_LEFT_MOTOR, FRONT_RIGHT_MOTOR, REAR_RIGHT_MOTOR);

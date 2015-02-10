@@ -16,6 +16,8 @@ public class Robot extends SampleRobot {
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
 
+    private Elevator elevator = new Elevator();
+    
     public static final String DEBUG_FILE = "/tmp/debug.txt";
     public static Debug debug = new Debug(DEBUG_FILE);
     
@@ -33,9 +35,9 @@ public class Robot extends SampleRobot {
 
     public void autonomous() {
     	debug.println("Entering autonomous mode...");
-        robotDrive.enterAutonomousMode();
+        //robotDrive.enterAutonomousMode();
         while (isAutonomous() && isEnabled()) {
-        	robotDrive.autoDrive();
+        	//robotDrive.autoDrive();
     	}
     }
     
@@ -47,8 +49,11 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) {
 			robotDrive.drive(controller);
 
+			// move elevator
+			elevator.move(controller);
+			
 			// moving camera
-			camera.moveCamera(controller);
+			//camera.moveCamera(controller);
 
 			//take a photo
 			if (controller.isAButtonPressed()) {
