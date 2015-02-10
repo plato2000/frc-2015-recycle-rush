@@ -2,6 +2,7 @@ package org.usfirst.frc.team4099.robot;
 
 import org.usfirst.frc.team4099.control.Gamepad;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 
@@ -9,8 +10,10 @@ public class Elevator {
 	public static final int LEFT_ELEVATOR = 6;
 	public static final int RIGHT_ELEVATOR = 7;
 	
-	private SpeedController leftElevator;
-	private SpeedController rightElevator;
+	private Talon leftElevatorTalon;
+	private Talon rightElevatorTalon;
+	private PIDController leftElevator;
+	private PIDController rightElevator;
 	
 	public Elevator() {
 		this.leftElevator = new Talon(LEFT_ELEVATOR);
