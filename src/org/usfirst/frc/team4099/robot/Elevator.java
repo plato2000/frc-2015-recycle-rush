@@ -12,20 +12,20 @@ public class Elevator {
 	public static final int UP_ENCODER_CHANNEL = 4;
 	public static final int DOWN_ENCODER_CHANNEL = 5;
 	
-	private Talon upEncoderTalon;
-	private Talon downEncoderTalon;
+	private Talon upElevatorTalon;
+	private Talon downElevatorTalon;
 	private Encoder encoder;
 	
 	public Elevator() {
-		this.upEncoderTalon = new Talon(LEFT_ELEVATOR);
-		this.downEncoderTalon = new Talon(RIGHT_ELEVATOR);
+		this.upElevatorTalon = new Talon(LEFT_ELEVATOR);
+		this.downElevatorTalon = new Talon(RIGHT_ELEVATOR);
 		this.encoder = new Encoder(UP_ENCODER_CHANNEL, DOWN_ENCODER_CHANNEL);
 		this.encoder.reset();
 	}
 	
 	public void move(Gamepad control) {
 		if (control.isDPadUpPressed()) {
-			
+			this.upElevatorTalon.set(0.4);
 		} 
 		/*
 		if (control.isBButtonPressed()) {
