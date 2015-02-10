@@ -2,34 +2,42 @@ package org.usfirst.frc.team4099.robot;
 
 import org.usfirst.frc.team4099.control.Gamepad;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 
 public class Elevator {
 	public static final int LEFT_ELEVATOR = 6;
 	public static final int RIGHT_ELEVATOR = 7;
+	public static final int UP_ENCODER_CHANNEL = 4;
+	public static final int DOWN_ENCODER_CHANNEL = 5;
 	
-	private Talon leftElevatorTalon;
-	private Talon rightElevatorTalon;
-	private PIDController leftElevator;
-	private PIDController rightElevator;
+	private Talon upEncoderTalon;
+	private Talon downEncoderTalon;
+	private Encoder encoder;
 	
 	public Elevator() {
-		this.leftElevator = new Talon(LEFT_ELEVATOR);
-		this.rightElevator = new Talon(RIGHT_ELEVATOR);
+		this.upEncoderTalon = new Talon(LEFT_ELEVATOR);
+		this.downEncoderTalon = new Talon(RIGHT_ELEVATOR);
+		this.encoder = new Encoder(UP_ENCODER_CHANNEL, DOWN_ENCODER_CHANNEL);
+		this.encoder.reset();
 	}
 	
 	public void move(Gamepad control) {
+		if (control.isDPadUpPressed()) {
+			
+		} 
+		/*
 		if (control.isBButtonPressed()) {
-			this.leftElevator.set(0.4);
-			this.rightElevator.set(0.4);
+			this.upEncoder.set(0.4);
+			this.downEncoder.set(0.4);
 		} else if (control.isAButtonPressed()) {
-			this.leftElevator.set(-0.225);
-			this.rightElevator.set(-0.225);
+			this.upEncoder.set(-0.225);
+			this.downEncoder.set(-0.225);
 		} else {
-			this.leftElevator.set(0.4);
-			this.rightElevator.set(0.4);
+			this.upEncoder.set(0.4);
+			this.downEncoder.set(0.4);
 		}
+		*/
 	}
 }
