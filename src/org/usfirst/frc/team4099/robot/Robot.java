@@ -56,10 +56,10 @@ public class Robot extends SampleRobot {
 			//camera.moveCamera(controller);
 
 			//take a photo
-			if (controller.isAButtonPressed()) {
-                Timer.delay(1.0);
-				camera.takePhoto();
-			}
+			//if (controller.isAButtonPressed()) {
+            //    Timer.delay(1.0);
+			//	camera.takePhoto();
+			//}
 
 			// wait for motor update
             Timer.delay(0.005);

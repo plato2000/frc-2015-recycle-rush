@@ -33,7 +33,6 @@ public class Gamepad extends Joystick {
 	public static final int Y_BUTTON = 4;
 	
 	/* DPAD */
-	public static final int DPAD_POV = 1;
 	public static final int DPAD_NORTH = 0;
 	public static final int DPAD_NORTHEAST = 45;
 	public static final int DPAD_EAST = 90;
@@ -57,31 +56,51 @@ public class Gamepad extends Joystick {
 	
 	// treat these as buttons
 	public boolean isDPadUpPressed() {
-		int dir = this.getPOV(DPAD_POV);
+		int dir = this.getPOV();
 		return (dir == DPAD_NORTH || 
 				dir == DPAD_NORTHWEST ||
 				dir == DPAD_NORTHEAST);
 	}
 	
 	public boolean isDPadDownPressed() {
-		int dir = this.getPOV(DPAD_POV);
+		int dir = this.getPOV();
 		return (dir == DPAD_SOUTH ||
 				dir == DPAD_SOUTHWEST ||
 				dir == DPAD_SOUTHEAST);
 	}
 	
 	public boolean isDPadLeftPressed() {
-		int dir = this.getPOV(DPAD_POV);
+		int dir = this.getPOV();
 		return (dir == DPAD_WEST || 
 				dir == DPAD_NORTHWEST ||
 				dir == DPAD_SOUTHWEST);
 	}
 	
 	public boolean isDPadRightPressed() {
-		int dir = this.getPOV(DPAD_POV);
+		int dir = this.getPOV();
 		return (dir == DPAD_EAST ||
 				dir == DPAD_NORTHEAST ||
 				dir == DPAD_SOUTHEAST);
+	}
+	
+	public boolean isDPadUpPressedStrict() {
+		int dir = this.getPOV();
+		return (dir == DPAD_NORTH);
+	}
+	
+	public boolean isDPadDownPressedStrict() {
+		int dir = this.getPOV();
+		return (dir == DPAD_SOUTH);
+	}
+	
+	public boolean isDPadLeftPressedStrict() {
+		int dir = this.getPOV();
+		return (dir == DPAD_WEST);
+	}
+	
+	public boolean isDPadRightPressedStrict() {
+		int dir = this.getPOV();
+		return (dir == DPAD_EAST);
 	}
 	
 	public double getLeftHorizontalAxis() {

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 	public static final int LEFT_ELEVATOR = 6;
@@ -35,7 +36,8 @@ public class Elevator {
 		
 		leftLiftPID = new PIDController(kLift_P, kLift_I, kLift_D, encoder, leftTalon);
 		rightLiftPID = new PIDController(kLift_P, kLift_I, kLift_D, encoder, rightTalon);
-		
+		leftLiftPID.enable();
+		rightLiftPID.enable();
 		encoder.reset();
 	}
 	
@@ -54,7 +56,18 @@ public class Elevator {
 			currentHeight = 0;
 		}
 		
-		setHeight(currentHeight);
+		if (control.isYButtonPressed()) {
+			leftTalon.set(0.35);
+			rightTalon.set(0.35);
+		} else {
+			leftTalon.set(0.0);
+			rightTalon.set(0.0);
+		}
+		
+		SmartDashboard.putString("encoder", encoder.getDistance() + "");
+		SmartDashboard.putString("dpad", control.getPOV() + "");
+		Robot.debug.println(encoder.getDistance() + "");
+		//setHeight(currentHeight);
 	}
 	
 	public void setHeight(double height) {
