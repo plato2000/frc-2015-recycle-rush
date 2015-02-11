@@ -57,16 +57,16 @@ public class Elevator {
 		}
 		
 		if (control.isYButtonPressed()) {
-			leftTalon.set(0.35);
-			rightTalon.set(0.35);
+			leftTalon.set(0.5);
+			rightTalon.set(0.5);
 		} else {
 			leftTalon.set(0.0);
 			rightTalon.set(0.0);
 		}
 		
-		SmartDashboard.putString("encoder", encoder.getDistance() + "");
-		SmartDashboard.putString("dpad", control.getPOV() + "");
-		Robot.debug.println(encoder.getDistance() + "");
+		//SmartDashboard.putString("encoder", encoder.getDistance() + "");
+		//SmartDashboard.putString("dpad", control.getPOV() + "");
+		//Robot.debug.println(encoder.getDistance() + "");
 		//setHeight(currentHeight);
 	}
 	

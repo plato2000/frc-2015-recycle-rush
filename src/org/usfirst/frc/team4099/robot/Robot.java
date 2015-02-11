@@ -17,6 +17,7 @@ public class Robot extends SampleRobot {
     private Gamepad controller = new Gamepad(0);
 
     private Elevator elevator = new Elevator();
+    private Reel reel = new Reel();
     
     public static final String DEBUG_FILE = "/tmp/debug.txt";
     public static Debug debug = new Debug(DEBUG_FILE);
@@ -48,7 +49,7 @@ public class Robot extends SampleRobot {
 
 		while (isOperatorControl() && isEnabled()) {
 			robotDrive.drive(controller);
-
+			reel.move(controller);
 			// move elevator
 			elevator.move(controller);
 			
