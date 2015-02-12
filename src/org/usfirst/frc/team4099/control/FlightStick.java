@@ -40,4 +40,9 @@ public class FlightStick extends Joystick {
 	public boolean isFrontButtonPressed() {
 		return this.getRawButton(FRONT_BUTTON);
 	}
+	
+	public boolean isPOVDownPressedStrict() {
+		int dir = this.getPOV();
+		return (dir == POV_SOUTH);
+	}
 }

@@ -52,11 +52,23 @@ public class Robot extends SampleRobot {
         robotDrive.enterTeleoperatedMode();
 		debug.println("Entering teleoperated mode...");
 		SmartDashboard.putBoolean("isUsingPID?", false);
+		boolean useXBox = true;
 		while (isOperatorControl() && isEnabled()) {
-			robotDrive.drive(controller, flight);
-			reel.move(controller, flight);
-			// move elevator
-			elevator.moveOther(flight);
+			if (useXBox) {
+				robotDrive.drive(controller);
+				reel.move(controller);
+				// move elevator
+				elevator.moveOther(flight);
+			} else {
+				robotDrive.drive(flight);
+				reel.move(flight);
+				elevator.moveOther(flight);
+			}
+			
+			if (controller.isRightShoulderPressed()) {
+				useXBox = !useXBox;
+			}
+			
 			//elevator.move(controller);
 			// moving camera
 			//camera.moveCamera(controller);

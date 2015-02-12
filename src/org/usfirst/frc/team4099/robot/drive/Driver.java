@@ -61,28 +61,34 @@ public class Driver {
     	this.autoDrive.autoDrive();
     }
 	
-	public void drive(Gamepad controller, FlightStick flight) {
+    public void drive(FlightStick flight) {
+    	switch (currentMode) {
+    	case ARCADE:
+    		arcadeDrive.arcadeDrive(flight.getVerticalAxis() / REDUCTION_FACTOR,
+    				-flight.getTwist() / REDUCTION_FACTOR);
+    	case SLIDE:
+    		slideDrive.slideDrive(flight.getVerticalAxis() / REDUCTION_FACTOR, 
+        			-flight.getTwist() / REDUCTION_FACTOR, 
+        			flight.getHorizontalAxis());
+    	}
+    	
+    }
+    
+	public void drive(Gamepad controller) {
 		switch (currentMode) {
 		case ARCADE:
-			if (controller.getLeftVerticalAxis()>0 || controller.getLeftHorizontalAxis() > 0) {
-				arcadeDrive.arcadeDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
+			arcadeDrive.arcadeDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
                         -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
-			} else {
-				arcadeDrive.arcadeDrive(flight.getVerticalAxis() / REDUCTION_FACTOR,
-						-flight.getTwist() / REDUCTION_FACTOR);
-			}
 			
 			break;
 
 		case SLIDE:
             System.out.println(controller.getRightHorizontalAxis());
 //			slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR, controller.getRightHorizontalAxis());
-			
-            if (controller.getLeftVerticalAxis() > 0 || controller.getRightHorizontalAxis() > 0 || controller.getLeftHorizontalAxis() > 0) {
-                slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getRightHorizontalAxis() / REDUCTION_FACTOR, controller.getLeftHorizontalAxis());
-            } else {
-            	slideDrive.slideDrive(flight.getVerticalAxis() / REDUCTION_FACTOR, -flight.getTwist() / REDUCTION_FACTOR, flight.getHorizontalAxis());
-            }
+
+            slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
+                		-controller.getRightHorizontalAxis() / REDUCTION_FACTOR,
+                		controller.getLeftHorizontalAxis());
             /*if (controller.isDPadLeftPressedStrict()) {
             	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -0.75, controller.getLeftHorizontalAxis());
             } else if (controller.isDPadRightPressedStrict()) {

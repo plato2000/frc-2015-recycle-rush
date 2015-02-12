@@ -16,8 +16,19 @@ public class Reel {
 		rightRelay = new Relay(RIGHT_RELAY_PIN);
 	}
 	
-	public void move(Gamepad control, FlightStick flight) {
+	public void move(Gamepad control) {
 		if (control.isXButtonPressed()) {
+			//reel stuff in
+			leftRelay.set(Relay.Value.kOn);
+			rightRelay.set(Relay.Value.kOn);
+		} else {
+			leftRelay.set(Relay.Value.kOff);
+			rightRelay.set(Relay.Value.kOff);
+		}
+	}
+	
+	public void move(FlightStick control) {
+		if (control.isPOVDownPressedStrict()) {
 			//reel stuff in
 			leftRelay.set(Relay.Value.kOn);
 			rightRelay.set(Relay.Value.kOn);
