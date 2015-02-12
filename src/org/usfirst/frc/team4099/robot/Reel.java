@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4099.robot;
 
+import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 
 import edu.wpi.first.wpilibj.Relay;
@@ -15,7 +16,7 @@ public class Reel {
 		rightRelay = new Relay(RIGHT_RELAY_PIN);
 	}
 	
-	public void move(Gamepad control) {
+	public void move(Gamepad control, FlightStick flight) {
 		if (control.isXButtonPressed()) {
 			//reel stuff in
 			leftRelay.set(Relay.Value.kOn);

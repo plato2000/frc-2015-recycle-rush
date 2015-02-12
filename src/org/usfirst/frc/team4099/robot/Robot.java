@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4099.robot;
 
 import org.usfirst.frc.team4099.camera.RobotCamera;
+import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
 
@@ -17,7 +18,8 @@ public class Robot extends SampleRobot {
 	private LimitSwitches limitswitches = new LimitSwitches();
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
-    private Joystick lifter = new Joystick(1);
+    //private Joystick lifter = new Joystick(1);
+    private FlightStick flight = new FlightStick(1);
 
     private Elevator elevator = new Elevator();
     private Reel reel = new Reel();
@@ -51,10 +53,10 @@ public class Robot extends SampleRobot {
 		debug.println("Entering teleoperated mode...");
 		SmartDashboard.putBoolean("isUsingPID?", false);
 		while (isOperatorControl() && isEnabled()) {
-			robotDrive.drive(controller);
-			reel.move(controller);
+			robotDrive.drive(controller, flight);
+			reel.move(controller, flight);
 			// move elevator
-			elevator.moveOther(lifter);
+			elevator.moveOther(flight);
 			//elevator.move(controller);
 			// moving camera
 			//camera.moveCamera(controller);

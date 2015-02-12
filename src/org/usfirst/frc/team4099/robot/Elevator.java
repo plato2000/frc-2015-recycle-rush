@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4099.robot;
 
+import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -7,7 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 	public static final int LEFT_ELEVATOR = 6;
@@ -46,9 +46,9 @@ public class Elevator {
 		encoder.reset();
 	}
 	
-	public void moveOther(Joystick control) {
-		leftTalon.set((control.getRawAxis(3) - 1) / 2.0);
-		rightTalon.set((control.getRawAxis(3) - 1) / 2.0);
+	public void moveOther(FlightStick flight) {
+		leftTalon.set(flight.getSlider() / 2.0);
+		rightTalon.set(flight.getSlider() / 2.0);
 	}
 	
 	public void moveOtherOther(Joystick control) {
