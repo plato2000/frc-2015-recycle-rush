@@ -37,7 +37,7 @@ public class SlideDrive {
 
 		arcadeDrive.arcadeDrive(forward, turn);
 		//Robot.debug.println("" + strafe);
-		if (Math.abs(strafe) > 0.3) {
+		if (Math.abs(strafe) > 0.1) {
 			this.slide(strafe);
 		} else {
 			this.slide(0);

@@ -3,6 +3,7 @@ package org.usfirst.frc.team4099.robot;
 import org.usfirst.frc.team4099.control.Gamepad;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Talon;
@@ -16,6 +17,8 @@ public class Elevator {
 	private double kLift_I = 0.05;
 	private double kLift_D = 0.005;
 	
+	private boolean usingPID = false;
+	
 	private Talon leftTalon;
 	private Talon rightTalon;
 	private Encoder encoder;
@@ -23,6 +26,8 @@ public class Elevator {
 	private PIDController leftLiftPID;
 	private PIDController rightLiftPID;
 	
+	public static final int ENCODER_PIN_1 = 4;
+	public static final int ENCODER_PIN_2 = 5;
 	private double currentHeight = 0;
 	private double DISTANCE_PER_PULSE = 0.1;
 	
@@ -30,22 +35,31 @@ public class Elevator {
 		leftTalon = new Talon(LEFT_ELEVATOR);
 		rightTalon = new Talon(RIGHT_ELEVATOR);
 		
-		encoder = new Encoder(4, 5);
+		encoder = new Encoder(ENCODER_PIN_1, ENCODER_PIN_2);
 		encoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kDistance);
 		encoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		
 		leftLiftPID = new PIDController(kLift_P, kLift_I, kLift_D, encoder, leftTalon);
 		rightLiftPID = new PIDController(kLift_P, kLift_I, kLift_D, encoder, rightTalon);
-		leftLiftPID.enable();
-		rightLiftPID.enable();
+		//leftLiftPID.enable();
+		//rightLiftPID.enable();
 		encoder.reset();
 	}
 	
+	public void moveOther(Joystick control) {
+		leftTalon.set((control.getRawAxis(3) - 1) / 2.0);
+		rightTalon.set((control.getRawAxis(3) - 1) / 2.0);
+	}
+	
+	public void moveOtherOther(Joystick control) {
+		
+	}
+	
 	public void move(Gamepad control) {
-		if (control.isBButtonPressed()) {
-			currentHeight += 0.1;
-		} else if (control.isAButtonPressed()) {
-			currentHeight -= 0.1;
+		if (control.isDPadUpPressed()) {
+			currentHeight += 0.001;
+		} else if (control.isDPadDownPressed()) {
+			currentHeight -= 0.001;
 		}
 		
 		if (currentHeight > 10) {
@@ -56,20 +70,23 @@ public class Elevator {
 			currentHeight = 0;
 		}
 		
-		if (control.isYButtonPressed()) {
-			leftTalon.set(0.5);
-			rightTalon.set(0.5);
+		/*if (control.isYButtonPressed()) {
+			leftTalon.set(-0.6);
+			rightTalon.set(-0.6);
 		} else {
-			leftTalon.set(0.0);
-			rightTalon.set(0.0);
+			leftLiftPID.enable();
+			rightLiftPID.enable();
+			leftTalon.set(0);
+			rightTalon.set(0);
+		}*/
+		leftTalon.set(Math.abs(control.getRightVerticalAxis()) / -1.5);
+		rightTalon.set(Math.abs(control.getRightVerticalAxis()) / -1.5);
+
+		if (control.isAButtonPressed()) {
+			setHeight(currentHeight);
 		}
-		
-		//SmartDashboard.putString("encoder", encoder.getDistance() + "");
-		//SmartDashboard.putString("dpad", control.getPOV() + "");
-		//Robot.debug.println(encoder.getDistance() + "");
-		//setHeight(currentHeight);
 	}
-	
+
 	public void setHeight(double height) {
 		leftLiftPID.setSetpoint(height);
 		rightLiftPID.setSetpoint(height);

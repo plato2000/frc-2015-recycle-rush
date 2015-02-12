@@ -4,8 +4,10 @@ import org.usfirst.frc.team4099.camera.RobotCamera;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot {
 	public static final String CAMERA_IP = "10.40.99.11";
@@ -15,6 +17,7 @@ public class Robot extends SampleRobot {
 	private LimitSwitches limitswitches = new LimitSwitches();
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
+    private Joystick lifter = new Joystick(1);
 
     private Elevator elevator = new Elevator();
     private Reel reel = new Reel();
@@ -46,13 +49,13 @@ public class Robot extends SampleRobot {
     	limitswitches.addToSmartDashboard();
         robotDrive.enterTeleoperatedMode();
 		debug.println("Entering teleoperated mode...");
-
+		SmartDashboard.putBoolean("isUsingPID?", false);
 		while (isOperatorControl() && isEnabled()) {
 			robotDrive.drive(controller);
 			reel.move(controller);
 			// move elevator
-			elevator.move(controller);
-			
+			elevator.moveOther(lifter);
+			//elevator.move(controller);
 			// moving camera
 			//camera.moveCamera(controller);
 

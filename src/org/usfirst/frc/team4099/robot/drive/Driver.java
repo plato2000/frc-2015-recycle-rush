@@ -71,7 +71,14 @@ public class Driver {
             System.out.println(controller.getRightHorizontalAxis());
 //			slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR, controller.getRightHorizontalAxis());
 			slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getRightHorizontalAxis() / REDUCTION_FACTOR, controller.getLeftHorizontalAxis());
-			break;
+            /*if (controller.isDPadLeftPressedStrict()) {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -0.75, controller.getLeftHorizontalAxis());
+            } else if (controller.isDPadRightPressedStrict()) {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, 0.75, controller.getLeftHorizontalAxis());
+            } else {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, 0.0, controller.getLeftHorizontalAxis());            	
+            }*/
+            break;
 		}
 	}
 }
