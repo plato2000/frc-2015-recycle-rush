@@ -5,6 +5,7 @@ import org.usfirst.frc.team4099.robot.drive.Driver;
 import org.usfirst.frc.team4099.robot.drive.SlideDrive;
 
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class AutoDrive {
@@ -17,7 +18,7 @@ public class AutoDrive {
 	}
 	
 	public void autoDrive() {
-		Direction dir;
+		/*Direction dir;
 		dir = camera.getDirection();
 		switch(dir) {
 			case LEFT:
@@ -34,6 +35,8 @@ public class AutoDrive {
 				//move forward to pick up box
 				//slideDrive.slideDrive(.5 / REDUCTION_FACTOR, 0, 0);
 				break;
-		}
+		}*/
+		this.slideDrive.slideDrive(0.4,0.0,0.0);
+    	Timer.delay(5.0);
 	}
 }

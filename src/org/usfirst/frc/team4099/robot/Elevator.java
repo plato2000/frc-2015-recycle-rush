@@ -8,14 +8,15 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 	public static final int LEFT_ELEVATOR = 6;
 	public static final int RIGHT_ELEVATOR = 7;
 	
-	private double kLift_P = 0.5;
-	private double kLift_I = 0.05;
-	private double kLift_D = 0.005;
+	private double kLift_P = 0.1;
+	private double kLift_I = 0.01;
+	private double kLift_D = 0.001;
 	
 	private boolean usingPID = false;
 	
@@ -26,10 +27,13 @@ public class Elevator {
 	private PIDController leftLiftPID;
 	private PIDController rightLiftPID;
 	
+	public static final double ELEVATOR_MAX = 80.0;
+	public static final double ELEVATOR_MIN = 0.0;
+	
 	public static final int ENCODER_PIN_1 = 4;
 	public static final int ENCODER_PIN_2 = 5;
 	private double currentHeight = 0;
-	private double DISTANCE_PER_PULSE = 0.1;
+	private double DISTANCE_PER_PULSE = 0.01;
 	
 	public Elevator() {
 		leftTalon = new Talon(LEFT_ELEVATOR);
@@ -46,30 +50,53 @@ public class Elevator {
 		encoder.reset();
 	}
 	
-	public void moveOther(FlightStick flight) {
-		leftTalon.set(flight.getSlider() / 2.0);
-		rightTalon.set(flight.getSlider() / 2.0);
+	public void twoManOpHuman(FlightStick flight) {
+		leftTalon.set(flight.getSlider() / -2.0);
+		rightTalon.set(flight.getSlider() / -2.0);
 	}
 	
-	public void moveOtherOther(Joystick control) {
+	public void singleManOpPID(Gamepad control) {
+		if (control.isDPadUpPressed()) {
+			currentHeight += 0.25;
+		} else if (control.isDPadDownPressed()) {
+			currentHeight -= 0.25;
+		}
 		
+		if (currentHeight > ELEVATOR_MAX) {
+			currentHeight = ELEVATOR_MAX;
+		}
+		
+		if (currentHeight < ELEVATOR_MIN) {
+			currentHeight = ELEVATOR_MIN;
+		}
+		
+		SmartDashboard.putString("encoder", "" + encoder.getDistance());
+		SmartDashboard.putString("height", "" + currentHeight);
+		setHeight(currentHeight);
 	}
 	
+	public void twoManOpPID(FlightStick flight) {
+		currentHeight = flight.getSlider() * ELEVATOR_MAX;
+		setHeight(currentHeight);
+	}
+	
+	//unused
 	public void move(Gamepad control) {
 		if (control.isDPadUpPressed()) {
-			currentHeight += 0.001;
+			currentHeight += 0.01;
 		} else if (control.isDPadDownPressed()) {
-			currentHeight -= 0.001;
+			currentHeight -= 0.01;
 		}
 		
-		if (currentHeight > 10) {
-			currentHeight = 10;
+		if (currentHeight > ELEVATOR_MAX) {
+			currentHeight = ELEVATOR_MAX;
 		}
 		
-		if (currentHeight < 0) {
-			currentHeight = 0;
+		if (currentHeight < ELEVATOR_MIN) {
+			currentHeight = ELEVATOR_MIN;
 		}
 		
+		// probably useless
 		/*if (control.isYButtonPressed()) {
 			leftTalon.set(-0.6);
 			rightTalon.set(-0.6);
@@ -79,12 +106,15 @@ public class Elevator {
 			leftTalon.set(0);
 			rightTalon.set(0);
 		}*/
+		
+		// might be used at competition
+		/*
 		leftTalon.set(Math.abs(control.getRightVerticalAxis()) / -1.5);
 		rightTalon.set(Math.abs(control.getRightVerticalAxis()) / -1.5);
-
-		if (control.isAButtonPressed()) {
-			setHeight(currentHeight);
-		}
+		*/
+		
+		// hopefully we can get this working
+		setHeight(currentHeight);
 	}
 
 	public void setHeight(double height) {

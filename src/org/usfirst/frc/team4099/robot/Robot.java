@@ -43,7 +43,7 @@ public class Robot extends SampleRobot {
     	debug.println("Entering autonomous mode...");
         //robotDrive.enterAutonomousMode();
         while (isAutonomous() && isEnabled()) {
-        	//robotDrive.autoDrive();
+        	robotDrive.autoDrive();
     	}
     }
     
@@ -52,32 +52,19 @@ public class Robot extends SampleRobot {
         robotDrive.enterTeleoperatedMode();
 		debug.println("Entering teleoperated mode...");
 		SmartDashboard.putBoolean("isUsingPID?", false);
-		boolean useXBox = true;
 		while (isOperatorControl() && isEnabled()) {
-			if (useXBox) {
-				robotDrive.drive(controller);
-				reel.move(controller);
-				// move elevator
-				elevator.moveOther(flight);
-			} else {
-				robotDrive.drive(flight);
-				reel.move(flight);
-				elevator.moveOther(flight);
-			}
+			robotDrive.drive(controller, flight);
+			// move the reel in wheels
+			//reel.move(controller, flight);
 			
-			if (controller.isRightShoulderPressed()) {
-				useXBox = !useXBox;
-			}
+			// move elevator (pick one)
+			elevator.twoManOpHuman(flight);
+			//elevator.singleManOpPID(controller);
+			//elevator.twoManOpPID(flight);
 			
 			//elevator.move(controller);
 			// moving camera
 			//camera.moveCamera(controller);
-
-			//take a photo
-			//if (controller.isAButtonPressed()) {
-            //    Timer.delay(1.0);
-			//	camera.takePhoto();
-			//}
 
 			// wait for motor update
             Timer.delay(0.005);
