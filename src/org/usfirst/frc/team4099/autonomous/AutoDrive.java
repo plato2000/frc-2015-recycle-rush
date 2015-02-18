@@ -58,12 +58,12 @@ public class AutoDrive {
 	    String msg = new String(buffer, 0, packet.getLength());
 	    System.out.println(packet.getAddress().getHostName() + ": " + msg);
 	    
-	    //TODO: actually process message recieved, act on it
-	    
 	    // Reset the length of the packet before reusing it.
 	    packet.setLength(buffer.length);
 		
-		
+	    //TODO: actually process message received, act on it
+	    
+	    
 		/*Direction dir;
 		dir = camera.getDirection();
 		switch(dir) {
