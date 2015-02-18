@@ -1,10 +1,12 @@
 package org.usfirst.frc.team4099.autonomous;
 
 import org.usfirst.frc.team4099.camera.*;
-import org.usfirst.frc.team4099.robot.drive.Driver;
 import org.usfirst.frc.team4099.robot.drive.SlideDrive;
 
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
+
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
 
 
 public class AutoDrive {
@@ -17,7 +19,47 @@ public class AutoDrive {
 	}
 	
 	public void autoDrive() {
-		Direction dir;
+		
+		slideDrive.slideDrive(0, 1, 0);
+		Timer.delay(.1);
+		slideDrive.slideDrive(1, 0, 0);
+		Timer.delay(1);
+		slideDrive.slideDrive(0, -1, 0);
+		Timer.delay(.1);
+		slideDrive.slideDrive(0, 0, 0);
+		
+		try {
+	      int port = 90;
+
+	      // Create a socket to listen on the port.
+	      DatagramSocket dsocket = new DatagramSocket(port);
+
+	      // Create a buffer to read datagrams into. If a
+	      // packet is larger than this buffer, the
+	      // excess will simply be discarded!
+	      byte[] buffer = new byte[2048];
+
+	      // Create a packet to receive data into the buffer
+	      DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+	      // Now loop forever, waiting to receive packets and printing them.
+	      while (true) {
+	    	  // Wait to receive a datagram
+	    	  dsocket.receive(packet);
+
+	    	  // Convert the contents to a string, and display them
+	    	  String msg = new String(buffer, 0, packet.getLength());
+	    	  System.out.println(packet.getAddress().getHostName() + ": " + msg);
+
+	        // Reset the length of the packet before reusing it.
+	        packet.setLength(buffer.length);
+		   }
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		
+		
+		/*Direction dir;
 		dir = camera.getDirection();
 		switch(dir) {
 			case LEFT:
@@ -35,5 +77,6 @@ public class AutoDrive {
 				//slideDrive.slideDrive(.5 / REDUCTION_FACTOR, 0, 0);
 				break;
 		}
+		*/
 	}
 }
