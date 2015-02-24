@@ -20,6 +20,11 @@ public class AutoDrive {
 	private byte[] buffer = new byte[256];
 	private DatagramPacket packet;
 	
+	private final double FORWARD_50_INCHES_TIME = 1.5;
+	private final double PIVOT_90_DEGREES_TIME = 2.3;
+	private final double SLIDE_50_INCHES_TIME = 4.0;
+	
+	
 	
 	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
 		this.camera = camera;
@@ -33,21 +38,96 @@ public class AutoDrive {
 		}
 	}
 	
-	public void moveToAutoZone() {
-		slideDrive.slideDrive(0, 1, 0);
-		Timer.delay(.1);
-		slideDrive.slideDrive(1, 0, 0);
-		Timer.delay(1);
-		slideDrive.slideDrive(0, -1, 0);
-		Timer.delay(.1);
+	public void move(double forwardDistance, double pivotDegrees, double slideDistance) {
+		double[] powers = new double[3];
+		
+		//Set which direction to run the motors
+		if(forwardDistance > 0) {
+			powers[0] = 1;
+		} else if(forwardDistance < 0){
+			powers[0] = -1;
+		}
+		else powers[0] = 0;
+		
+		if(pivotDegrees > 0) {
+			powers[1] = 1;
+		} else if(pivotDegrees < 0){
+			powers[1] = -1;
+		}
+		else powers[1] = 0;
+		
+		if(slideDistance > 0) {
+			powers[2] = 1;
+		} else if(slideDistance < 0){
+			powers[2] = -1;
+		}
+		else powers[2] = 0;
+		
+		
+		double[] times = new double[3];
+		times[0] = Math.abs(forwardDistance * FORWARD_50_INCHES_TIME / 50);
+		times[1] = Math.abs(pivotDegrees * PIVOT_90_DEGREES_TIME / 90);
+		times[2] = Math.abs(slideDistance * SLIDE_50_INCHES_TIME / 50);
+		
+		int[] order = new int[3];
+		
+		if(times[0] >= times[1] && times[1] >= times[2]) {
+			order[0] = 2;
+			order[1] = 1;
+			order[2] = 0;
+		} else if (times[0] >= times[1] && times[0] >= times[2]) {
+			order[0] = 1;
+			order[1] = 2;
+			order[2] = 0;
+		} else if (times[1] >= times[0] && times[0] >= times[2]) {
+			order[0] = 2;
+			order[1] = 0;
+			order[2] = 1;
+		} else if (times[1] >= times[0] && times[1] >= times[2]) {
+			order[0] = 0;
+			order[1] = 2;
+			order[2] = 1;
+		} else if (times[2] >= times[0] && times[0] >= times[1]) {
+			order[0] = 1;
+			order[1] = 0;
+			order[2] = 2;
+		} else {
+			order[0] = 0;
+			order[1] = 1;
+			order[2] = 2;
+		}
+		
+		slideDrive.slideDrive(powers[0], powers[1], powers[2]);
+		Timer.delay(times[order[0]]);
+		powers[order[0]] = 0;
+		slideDrive.slideDrive(powers[0], powers[1], powers[2]);
+		Timer.delay(times[order[0]] - times[order[1]]);
+		powers[order[1]] = 0;
+		slideDrive.slideDrive(powers[0], powers[1], powers[2]);
+		Timer.delay(times[order[0]] - times[order[1]] - times[order[2]]);
 		slideDrive.slideDrive(0, 0, 0);
+	}
+	
+	public void timingMoveToAutoZone() {
+		// Into recycling bin
+		move(10, 0, 0);
+		// TODO: pick up bin
+		// Out of recycling bin
+		move(-20, 0, 0);
+		// TODO: place bin
+		
+		// Move over to tote
+		move(0, 20, 0);
+		// Move into auto zone
+		move(100, 0, 0);
+		
 		inAutoZone = true;
 	}
 	
 	public void autoDrive() {
 		
 		if(!inAutoZone) 
-			moveToAutoZone();
+			timingMoveToAutoZone();
 		
 	    try {
 			dsocket.receive(packet);
