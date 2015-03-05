@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4099.robot.drive;
 
 import org.usfirst.frc.team4099.autonomous.AutoDrive;
+import org.usfirst.frc.team4099.autonomous.AutoMode;
 import org.usfirst.frc.team4099.camera.RobotCamera;
 import org.usfirst.frc.team4099.control.Gamepad;
 
@@ -21,10 +22,10 @@ public class Driver {
     public static final int FRONT_SLIDE_MOTOR = 4;
     public static final int REAR_SLIDE_MOTOR = 5;
 	
-	public Driver(RobotCamera cam) {
+	public Driver(RobotCamera cam, AutoMode autoMode) {
         arcadeDrive = new RobotDrive(FRONT_LEFT_MOTOR, REAR_LEFT_MOTOR, FRONT_RIGHT_MOTOR, REAR_RIGHT_MOTOR);
         slideDrive = new SlideDrive(arcadeDrive, FRONT_SLIDE_MOTOR, REAR_SLIDE_MOTOR);
-        autoDrive = new AutoDrive(cam, slideDrive);
+        autoDrive = new AutoDrive(cam, slideDrive, autoMode);
         arcadeDrive.setExpiration(0.1);
 	}
 	
@@ -49,6 +50,7 @@ public class Driver {
 	}
 
     public void enterTeleoperatedMode() {
+    	this.autoDrive = null;
         this.arcadeDrive.setSafetyEnabled(true);
     }
     

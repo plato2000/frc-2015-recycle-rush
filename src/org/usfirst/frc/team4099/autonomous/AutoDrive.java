@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4099.autonomous;
 
 import org.usfirst.frc.team4099.camera.*;
+import org.usfirst.frc.team4099.robot.Elevator;
 import org.usfirst.frc.team4099.robot.drive.SlideDrive;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -13,8 +14,11 @@ import java.net.DatagramPacket;
 public class AutoDrive {
 	private RobotCamera camera;
 	private SlideDrive slideDrive;
+	private Elevator elevator;
+	private AutoMode mode;
 	
-	public Boolean inAutoZone = false;
+	
+	public Boolean movedToAutoZone = false;
 	
 	private DatagramSocket dsocket;
 	private byte[] buffer = new byte[256];
@@ -26,9 +30,10 @@ public class AutoDrive {
 	
 	
 	
-	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
+	public AutoDrive(RobotCamera camera, SlideDrive slideDrive, AutoMode mode) {
 		this.camera = camera;
 		this.slideDrive = slideDrive;
+		this.mode = mode;
 		try {
 		      int port = 90;
 		      dsocket = new DatagramSocket(port);
@@ -110,24 +115,48 @@ public class AutoDrive {
 	
 	public void timingMoveToAutoZone() {
 		// Into recycling bin
-		move(10, 0, 0);
+		move(20, 0, 0);
 		// TODO: pick up bin
+		elevator.setHeight(1);
 		// Out of recycling bin
-		move(-20, 0, 0);
-		// TODO: place bin
+		move(-30, 0, 0);
 		
 		// Move over to tote
-		move(0, 20, 0);
+		move(0, 28, 0);
+		move(17, 0, 0);
+		//TODO: place recycling bin
+		elevator.setHeight(.5);
+		move(-17, 0, 0);
+		elevator.setHeight(0);
 		// Move into auto zone
-		move(100, 0, 0);
-		
-		inAutoZone = true;
+		simpleMoveToAuto();
+		movedToAutoZone = true;
 	}
 	
+	public void simpleMoveToAuto() {
+		move(154, 0, 0);
+	}
+	
+	public void turnAround() {
+		move(0, 0, 90);
+		move(-20, 0, 0);
+		move(0, 0, 90);
+	}
+	
+	
 	public void autoDrive() {
-		
-		if(!inAutoZone) 
-			timingMoveToAutoZone();
+		if(!movedToAutoZone) {
+			switch(mode) {
+			case MOVE_TO_AUTO_ZONE:
+				simpleMoveToAuto();
+				break;
+			case PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE:
+				timingMoveToAutoZone();
+				break;
+			default:
+				timingMoveToAutoZone();
+			}
+		}
 		
 	    try {
 			dsocket.receive(packet);
