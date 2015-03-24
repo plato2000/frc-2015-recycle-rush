@@ -4,17 +4,17 @@ import org.usfirst.frc.team4099.camera.*;
 import org.usfirst.frc.team4099.robot.Elevator;
 import org.usfirst.frc.team4099.robot.drive.SlideDrive;
 
-
-import edu.wpi.first.wpilibj.RobotDrive;
-
 import edu.wpi.first.wpilibj.Timer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.DatagramPacket;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.tables.ITable;
 
 public class AutoDrive {
 	private RobotCamera camera;
@@ -26,21 +26,17 @@ public class AutoDrive {
 	
 	private boolean timing = false;
 	
+    public static final double REDUCTION_FACTOR = 1.5;
+	
 	private final double FORWARD_50_INCHES_TIME = 1.5;
 	private final double PIVOT_90_DEGREES_TIME = 2.3;
 	private final double SLIDE_50_INCHES_TIME = 4.0;
 	
-	
-	//unused (permanently)
-	/*
-	private DatagramSocket dsocket;
-	private byte[] buffer = new byte[256];
-	private DatagramPacket packet;
-	*/	
-	
 	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
 		this.camera = camera;
 		this.slideDrive = slideDrive;
+		
+		// Checks for autonomous mode
 		String modeString = SmartDashboard.getString("AutoMode");
 		if(modeString.equalsIgnoreCase("move")) {
 			this.mode = AutoMode.MOVE_TO_AUTO_ZONE;
@@ -51,15 +47,6 @@ public class AutoDrive {
 			System.err.println("Defaulting to stack bin and tote and move");
 			this.mode = AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE;
 		}
-		/*
-		try {
-		      int port = 90;
-		      dsocket = new DatagramSocket(port);
-		      packet = new DatagramPacket(buffer, buffer.length);
-		} catch (Exception e) {
-				System.err.println(e);
-		}
-		*/
 	}
 	
 	public void move(double forwardDistance, double pivotDegrees, double slideDistance) {
@@ -166,14 +153,58 @@ public class AutoDrive {
 		move(0, 0, 90);
 	}
 	
+	public ArrayList<double[]> getFileOutput(Path path) {
+		ArrayList<double[]> moves = new ArrayList<double[]>(10000);
+		
+		Charset charset = Charset.forName("US-ASCII");
+		try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+		    String line = null;
+		    while ((line = reader.readLine()) != null) {
+		    	String[] outputStringArray = line.split(",");
+		        double[] output = {
+		        		Double.parseDouble(outputStringArray[0]),
+		        		Double.parseDouble(outputStringArray[1]),
+		        		Double.parseDouble(outputStringArray[2]),
+		        		Double.parseDouble(outputStringArray[3])
+		        };
+		        moves.add(output);
+		    }
+		} catch (IOException x) {
+		    System.err.format("IOException: %s%n", x);
+		}
+		return moves;
+	}
+	
 	public void doFile(AutoMode mode) {
-		// TODO: actually get stuff from file
+		// Figures out which file to use
+		String pathToFile = "";
+		switch(mode) {
+		case MOVE_TO_AUTO_ZONE:
+			pathToFile = "move.txt";
+			break;
+		case PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE:
+			pathToFile = "movePick.txt";
+			break;
+		default:
+			pathToFile = "movePick.txt";
+		}
+		
+		// Translates file to numbers
+		ArrayList<double[]> moves = getFileOutput(Paths.get(pathToFile));
+		
+		// Runs numbers
+		for(int i = 0; i < moves.size(); i++) {
+			slideDrive.slideDrive(moves.get(i)[0] / REDUCTION_FACTOR, -moves.get(i)[2] / REDUCTION_FACTOR, moves.get(i)[1]);
+			elevator.twoManOpHuman(moves.get(i)[3]);
+			Timer.delay(0.005);
+		}
 		
 	}
 	
 	public void autoDrive() {
 		
 		// Check for which auto mode it is
+		// Then, if it's supposed to do timing moving, do that
 		if(!movedToAutoZone) {
 			switch(mode) {
 			case MOVE_TO_AUTO_ZONE:
@@ -196,42 +227,5 @@ public class AutoDrive {
 			}
 			movedToAutoZone = true;
 		}
-		
-	    /*try {
-			dsocket.receive(packet);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    String msg = new String(buffer, 0, packet.getLength());
-	    System.out.println(packet.getAddress().getHostName() + ": " + msg);
-	    
-	    // Reset the length of the packet before reusing it.
-	    packet.setLength(buffer.length);
-		
-	    //TODO: actually process message received, act on it
-	    */
-	    
-		/*Direction dir;
-		dir = camera.getDirection();
-		switch(dir) {
-			case LEFT:
-				slideDrive.slideDrive(0,0,-.5/Driver.REDUCTION_FACTOR);
-				break;
-			case RIGHT:
-				slideDrive.slideDrive(0,0,.5/Driver.REDUCTION_FACTOR);
-				break;
-			case NO_BOX:
-				//move away, there is no yellow box in view
-				//slideDrive.slideDrive(-.5 / REDUCTION_FACTOR, 0, 0);
-				break;
-			case FORWARD:
-				//move forward to pick up box
-				//slideDrive.slideDrive(.5 / REDUCTION_FACTOR, 0, 0);
-				break;
-		}
-		}*/
-		this.slideDrive.slideDrive(0.4,0.0,0.0);
-    	Timer.delay(5.0);
 	}
 }

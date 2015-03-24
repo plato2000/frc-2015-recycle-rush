@@ -1,12 +1,10 @@
 package org.usfirst.frc.team4099.robot;
 
 import org.usfirst.frc.team4099.camera.RobotCamera;
-import org.usfirst.frc.team4099.autonomous.AutoMode;
 import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,22 +27,25 @@ public class Robot extends SampleRobot {
     public String recordPath = "";
     public ArrayList<double[]> moves = new ArrayList<double[]>(10000);
 
-    //private Joystick lifter = new Joystick(1);
     private FlightStick flight = new FlightStick(1);
 
-
+    
     private Elevator elevator = new Elevator();
-    private Reel reel = new Reel();
+    //private Reel reel = new Reel();
     
     public static final String DEBUG_FILE = "/tmp/debug.txt";
     public static Debug debug = new Debug(DEBUG_FILE);
     
     public Robot() {
+    	// Add stuff to SmartDashboard
     	SendableChooser sendableChooser = new SendableChooser();
     	sendableChooser.addDefault("Tote and Bin", "moveBins");
     	sendableChooser.addObject("Move w/o Picking", "move");
     	sendableChooser.addObject("DO NOT USE", "stack");
     	SmartDashboard.putData("Auto Mode", sendableChooser);
+    	SmartDashboard.putBoolean("isUsingPID?", false);
+		limitswitches.addToSmartDashboard();
+    	// Create the driver object
     	robotDrive = new Driver(camera);
     }
     
@@ -65,16 +66,19 @@ public class Robot extends SampleRobot {
     }
     
     public void operatorControl() {
-    	limitswitches.addToSmartDashboard();
-        robotDrive.enterTeleoperatedMode();
 		debug.println("Entering teleoperated mode...");
-		SmartDashboard.putBoolean("isUsingPID?", false);
+        robotDrive.enterTeleoperatedMode();
 		while (isOperatorControl() && isEnabled()) {
+			
+			// Start recording moves
 			if(controller.isAButtonPressed() && controller.isBButtonPressed() && !recordPath.equals("")) {
 				System.out.println("Recording moves... be quick!");
+				System.out.println("Remember to use the controller and singleManOpHuman mode.");
 				recordPath = SmartDashboard.getString("PathToRecord");
 			}
+			// Actually record moves if there's a place to put them
 			if(!recordPath.equals("")) {
+				// Gets inputs, only uses controller movement for now (may change if necessary)
 				double[] inputs = {
 						controller.getLeftVerticalAxis(),
 						controller.getLeftHorizontalAxis(),
@@ -86,11 +90,13 @@ public class Robot extends SampleRobot {
 			if(controller.isXButtonPressed() && controller.isYButtonPressed()) {
 				//TODO: write to file
 				
+				// Resets recordPath so that other autoModes can be recorded, stops recording
 				recordPath = "";
 			}
 			
 
 			robotDrive.drive(controller, flight);
+			
 			// move the reel in wheels
 			//reel.move(controller, flight);
 			
