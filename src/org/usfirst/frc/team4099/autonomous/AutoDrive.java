@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.ITable;
 
 public class AutoDrive {
 	private RobotCamera camera;
@@ -30,10 +32,20 @@ public class AutoDrive {
 	
 	
 	
-	public AutoDrive(RobotCamera camera, SlideDrive slideDrive, AutoMode mode) {
+	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
 		this.camera = camera;
 		this.slideDrive = slideDrive;
-		this.mode = mode;
+		String modeString = SmartDashboard.getString("AutoMode");
+		if(modeString.equalsIgnoreCase("move")) {
+			this.mode = AutoMode.MOVE_TO_AUTO_ZONE;
+		} else if(modeString.equalsIgnoreCase("stack")) {
+			System.err.println("ye fewl what you mad be?");
+			this.mode = AutoMode.PICK_AND_STACK_TOTES_AND_MOVE_TO_AUTO_ZONE;
+		} else {
+			System.err.println("Defaulting to stack bin and tote and move");
+			this.mode = AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE;
+		}
+		/*
 		try {
 		      int port = 90;
 		      dsocket = new DatagramSocket(port);
@@ -41,6 +53,7 @@ public class AutoDrive {
 		} catch (Exception e) {
 				System.err.println(e);
 		}
+		*/
 	}
 	
 	public void move(double forwardDistance, double pivotDegrees, double slideDistance) {
@@ -76,6 +89,7 @@ public class AutoDrive {
 		
 		int[] order = new int[3];
 		
+		// Set the order for them to turn off
 		if(times[0] >= times[1] && times[1] >= times[2]) {
 			order[0] = 2;
 			order[1] = 1;
@@ -102,6 +116,8 @@ public class AutoDrive {
 			order[2] = 2;
 		}
 		
+		
+		//Drive, wait, reset, repeat
 		slideDrive.slideDrive(powers[0], powers[1], powers[2]);
 		Timer.delay(times[order[0]]);
 		powers[order[0]] = 0;
@@ -130,7 +146,6 @@ public class AutoDrive {
 		elevator.setHeight(0);
 		// Move into auto zone
 		simpleMoveToAuto();
-		movedToAutoZone = true;
 	}
 	
 	public void simpleMoveToAuto() {
@@ -156,9 +171,10 @@ public class AutoDrive {
 			default:
 				timingMoveToAutoZone();
 			}
+			movedToAutoZone = true;
 		}
 		
-	    try {
+	    /*try {
 			dsocket.receive(packet);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -171,7 +187,7 @@ public class AutoDrive {
 	    packet.setLength(buffer.length);
 		
 	    //TODO: actually process message received, act on it
-	    
+	    */
 	    
 		/*Direction dir;
 		dir = camera.getDirection();

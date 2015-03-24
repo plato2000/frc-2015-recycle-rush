@@ -7,6 +7,9 @@ import org.usfirst.frc.team4099.robot.drive.Driver;
 
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.*;
+
+import java.util.ArrayList;
 
 public class Robot extends SampleRobot {
 	public static final String CAMERA_IP = "10.40.99.11";
@@ -16,6 +19,9 @@ public class Robot extends SampleRobot {
 	private LimitSwitches limitswitches = new LimitSwitches();
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
+    
+    public String recordPath = "";
+    public ArrayList moves = new ArrayList(10000);
 
     private Elevator elevator = new Elevator();
     
@@ -23,7 +29,11 @@ public class Robot extends SampleRobot {
     public static Debug debug = new Debug(DEBUG_FILE);
     
     public Robot() {
-    	robotDrive = new Driver(camera, AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE);
+    	SendableChooser sendableChooser = new SendableChooser();
+    	sendableChooser.addDefault("Tote and Bin", AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE);
+    	sendableChooser.addObject("Move w/o Picking", AutoMode.MOVE_TO_AUTO_ZONE);
+    	sendableChooser.addObject("DO NOT USE", AutoMode.PICK_AND_STACK_TOTES_AND_MOVE_TO_AUTO_ZONE);
+    	robotDrive = new Driver(camera);
     }
     
     public void robotinit() {
@@ -36,7 +46,7 @@ public class Robot extends SampleRobot {
 
     public void autonomous() {
     	debug.println("Entering autonomous mode...");
-        //robotDrive.enterAutonomousMode();
+        robotDrive.enterAutonomousMode();
         while (isAutonomous() && isEnabled()) {
         	robotDrive.autoDrive();
     	}
@@ -48,6 +58,18 @@ public class Robot extends SampleRobot {
 		debug.println("Entering teleoperated mode...");
 
 		while (isOperatorControl() && isEnabled()) {
+			robotDrive.record = SmartDashboard.getString("PathToRecord");
+			if(controller.isAButtonPressed() && controller.isBButtonPressed()) {
+				System.out.println("Recording moves... be quick!");
+				double[] inputs = {
+						controller.getLeftVerticalAxis(),
+						controller.getLeftHorizontalAxis(),
+						controller.getRightHorizontalAxis(),
+				};
+				
+			}
+			
+			
 			robotDrive.drive(controller);
 
 			// move elevator

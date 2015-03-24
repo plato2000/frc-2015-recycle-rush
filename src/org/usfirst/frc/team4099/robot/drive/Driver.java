@@ -7,6 +7,7 @@ import org.usfirst.frc.team4099.control.Gamepad;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 
+
 public class Driver {
 
     protected DriveMode currentMode = DriveMode.SLIDE;
@@ -22,10 +23,12 @@ public class Driver {
     public static final int FRONT_SLIDE_MOTOR = 4;
     public static final int REAR_SLIDE_MOTOR = 5;
 	
-	public Driver(RobotCamera cam, AutoMode autoMode) {
+    public static String record;
+    
+	public Driver(RobotCamera cam) {
         arcadeDrive = new RobotDrive(FRONT_LEFT_MOTOR, REAR_LEFT_MOTOR, FRONT_RIGHT_MOTOR, REAR_RIGHT_MOTOR);
         slideDrive = new SlideDrive(arcadeDrive, FRONT_SLIDE_MOTOR, REAR_SLIDE_MOTOR);
-        autoDrive = new AutoDrive(cam, slideDrive, autoMode);
+        autoDrive = new AutoDrive(cam, slideDrive);
         arcadeDrive.setExpiration(0.1);
 	}
 	
