@@ -2,14 +2,18 @@ package org.usfirst.frc.team4099.robot;
 
 import org.usfirst.frc.team4099.camera.RobotCamera;
 import org.usfirst.frc.team4099.autonomous.AutoMode;
+import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 import org.usfirst.frc.team4099.robot.drive.Driver;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
+
+
 
 public class Robot extends SampleRobot {
 	public static final String CAMERA_IP = "10.40.99.11";
@@ -19,11 +23,17 @@ public class Robot extends SampleRobot {
 	private LimitSwitches limitswitches = new LimitSwitches();
 	private Driver robotDrive;
     private Gamepad controller = new Gamepad(0);
+
     
     public String recordPath = "";
     public ArrayList moves = new ArrayList(10000);
 
+    //private Joystick lifter = new Joystick(1);
+    private FlightStick flight = new FlightStick(1);
+
+
     private Elevator elevator = new Elevator();
+    private Reel reel = new Reel();
     
     public static final String DEBUG_FILE = "/tmp/debug.txt";
     public static Debug debug = new Debug(DEBUG_FILE);
@@ -56,7 +66,7 @@ public class Robot extends SampleRobot {
     	limitswitches.addToSmartDashboard();
         robotDrive.enterTeleoperatedMode();
 		debug.println("Entering teleoperated mode...");
-
+		SmartDashboard.putBoolean("isUsingPID?", false);
 		while (isOperatorControl() && isEnabled()) {
 			robotDrive.record = SmartDashboard.getString("PathToRecord");
 			if(controller.isAButtonPressed() && controller.isBButtonPressed()) {
@@ -70,19 +80,22 @@ public class Robot extends SampleRobot {
 			}
 			
 			
-			robotDrive.drive(controller);
 
 			// move elevator
 			elevator.move(controller);
+
+			robotDrive.drive(controller, flight);
+			// move the reel in wheels
+			//reel.move(controller, flight);
 			
+			// move elevator (pick one)
+			elevator.twoManOpHuman(flight);
+			//elevator.singleManOpPID(controller);
+			//elevator.twoManOpPID(flight);
+			
+			//elevator.move(controller);
 			// moving camera
 			//camera.moveCamera(controller);
-
-			//take a photo
-			if (controller.isAButtonPressed()) {
-                Timer.delay(1.0);
-				camera.takePhoto();
-			}
 
 			// wait for motor update
             Timer.delay(0.005);

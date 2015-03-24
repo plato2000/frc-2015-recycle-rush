@@ -3,9 +3,11 @@ package org.usfirst.frc.team4099.robot.drive;
 import org.usfirst.frc.team4099.autonomous.AutoDrive;
 import org.usfirst.frc.team4099.autonomous.AutoMode;
 import org.usfirst.frc.team4099.camera.RobotCamera;
+import org.usfirst.frc.team4099.control.FlightStick;
 import org.usfirst.frc.team4099.control.Gamepad;
 
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class Driver {
@@ -65,18 +67,36 @@ public class Driver {
     	this.autoDrive.autoDrive();
     }
 	
-	public void drive(Gamepad controller) {
+	public void drive(Gamepad controller, FlightStick flight) {
 		switch (currentMode) {
 		case ARCADE:
-			arcadeDrive.arcadeDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
-                                    -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
+			if (controller.getLeftVerticalAxis()>0 || controller.getLeftHorizontalAxis() > 0) {
+				arcadeDrive.arcadeDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR,
+                        -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR);
+			} else {
+				arcadeDrive.arcadeDrive(flight.getVerticalAxis() / REDUCTION_FACTOR,
+						-flight.getTwist() / REDUCTION_FACTOR);
+			}
+			
 			break;
 
 		case SLIDE:
             System.out.println(controller.getRightHorizontalAxis());
 //			slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getLeftHorizontalAxis() / REDUCTION_FACTOR, controller.getRightHorizontalAxis());
-			slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getRightHorizontalAxis() / REDUCTION_FACTOR, controller.getLeftHorizontalAxis());
-			break;
+			
+            if (controller.getLeftVerticalAxis() > 0 || controller.getRightHorizontalAxis() > 0 || controller.getLeftHorizontalAxis() > 0) {
+                slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -controller.getRightHorizontalAxis() / REDUCTION_FACTOR, controller.getLeftHorizontalAxis());
+            } else {
+            	slideDrive.slideDrive(flight.getVerticalAxis() / REDUCTION_FACTOR, -flight.getTwist() / REDUCTION_FACTOR, flight.getHorizontalAxis());
+            }
+            /*if (controller.isDPadLeftPressedStrict()) {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, -0.75, controller.getLeftHorizontalAxis());
+            } else if (controller.isDPadRightPressedStrict()) {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, 0.75, controller.getLeftHorizontalAxis());
+            } else {
+            	slideDrive.slideDrive(controller.getLeftVerticalAxis() / REDUCTION_FACTOR, 0.0, controller.getLeftHorizontalAxis());            	
+            }*/
+            break;
 		}
 	}
 }

@@ -4,6 +4,9 @@ import org.usfirst.frc.team4099.camera.*;
 import org.usfirst.frc.team4099.robot.Elevator;
 import org.usfirst.frc.team4099.robot.drive.SlideDrive;
 
+
+import edu.wpi.first.wpilibj.RobotDrive;
+
 import edu.wpi.first.wpilibj.Timer;
 
 import java.io.IOException;
@@ -207,6 +210,8 @@ public class AutoDrive {
 				//slideDrive.slideDrive(.5 / REDUCTION_FACTOR, 0, 0);
 				break;
 		}
-		*/
+		}*/
+		this.slideDrive.slideDrive(0.4,0.0,0.0);
+    	Timer.delay(5.0);
 	}
 }

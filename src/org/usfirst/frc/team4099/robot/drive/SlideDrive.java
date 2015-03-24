@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class SlideDrive {
+	
+	private double currentSpeed;
+	
 	private SpeedController sliderTalonFront;
 	private SpeedController sliderTalonRear;
 	private RobotDrive arcadeDrive;
@@ -37,7 +40,19 @@ public class SlideDrive {
 
 		arcadeDrive.arcadeDrive(forward, turn);
 		//Robot.debug.println("" + strafe);
-		if (Math.abs(strafe) > 0.3) {
+		
+		if (Math.abs(strafe) > 0.1) {
+			/*if (Math.abs(strafe - currentSpeed) > 0.3) {
+				if (strafe < 0) {
+					this.slide(currentSpeed + 0.1);
+					currentSpeed += 0.1;
+				} else {
+					this.slide(currentSpeed - 0.1);
+					currentSpeed -= 0.1;
+				}
+			} else {
+				this.slide(strafe);
+			}*/
 			this.slide(strafe);
 		} else {
 			this.slide(0);

@@ -21,7 +21,7 @@ public class RobotCamera {
 
 	AxisCamera camera;
 	private static final double INIT_YAW = 0.5;
-	private static final double INIT_PITCH = 0.5;
+	private static final double INIT_PITCH = 0.0;
 	private static final double MOVE_SPEED = 1.0 / 180.0;
 	private Servo yawServo;
 	private Servo pitchServo;
