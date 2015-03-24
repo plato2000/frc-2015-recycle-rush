@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class Robot extends SampleRobot {
 
     
     public String recordPath = "";
-    public ArrayList moves = new ArrayList(10000);
+    public ArrayList<double[]> moves = new ArrayList<double[]>(10000);
 
     //private Joystick lifter = new Joystick(1);
     private FlightStick flight = new FlightStick(1);
@@ -40,9 +41,10 @@ public class Robot extends SampleRobot {
     
     public Robot() {
     	SendableChooser sendableChooser = new SendableChooser();
-    	sendableChooser.addDefault("Tote and Bin", AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE);
-    	sendableChooser.addObject("Move w/o Picking", AutoMode.MOVE_TO_AUTO_ZONE);
-    	sendableChooser.addObject("DO NOT USE", AutoMode.PICK_AND_STACK_TOTES_AND_MOVE_TO_AUTO_ZONE);
+    	sendableChooser.addDefault("Tote and Bin", "moveBins");
+    	sendableChooser.addObject("Move w/o Picking", "move");
+    	sendableChooser.addObject("DO NOT USE", "stack");
+    	SmartDashboard.putData("Auto Mode", sendableChooser);
     	robotDrive = new Driver(camera);
     }
     
@@ -68,30 +70,36 @@ public class Robot extends SampleRobot {
 		debug.println("Entering teleoperated mode...");
 		SmartDashboard.putBoolean("isUsingPID?", false);
 		while (isOperatorControl() && isEnabled()) {
-			robotDrive.record = SmartDashboard.getString("PathToRecord");
-			if(controller.isAButtonPressed() && controller.isBButtonPressed()) {
+			if(controller.isAButtonPressed() && controller.isBButtonPressed() && !recordPath.equals("")) {
 				System.out.println("Recording moves... be quick!");
+				recordPath = SmartDashboard.getString("PathToRecord");
+			}
+			if(!recordPath.equals("")) {
 				double[] inputs = {
 						controller.getLeftVerticalAxis(),
 						controller.getLeftHorizontalAxis(),
 						controller.getRightHorizontalAxis(),
+						flight.getSlider()
 				};
+				moves.add(inputs);
+			}
+			if(controller.isXButtonPressed() && controller.isYButtonPressed()) {
+				//TODO: write to file
 				
+				recordPath = "";
 			}
 			
-			
-
-			// move elevator
-			elevator.move(controller);
 
 			robotDrive.drive(controller, flight);
 			// move the reel in wheels
 			//reel.move(controller, flight);
 			
-			// move elevator (pick one)
-			elevator.twoManOpHuman(flight);
-			//elevator.singleManOpPID(controller);
-			//elevator.twoManOpPID(flight);
+			if(!SmartDashboard.getBoolean("isUsingPID?"))
+				elevator.twoManOpHuman(flight);
+			else
+				//pid move mode (pick 1)
+				elevator.singleManOpPID(controller);
+				//elevator.twoManOpPID(flight);
 			
 			//elevator.move(controller);
 			// moving camera

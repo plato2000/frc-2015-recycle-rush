@@ -22,18 +22,21 @@ public class AutoDrive {
 	private Elevator elevator;
 	private AutoMode mode;
 	
-	
 	public Boolean movedToAutoZone = false;
 	
-	private DatagramSocket dsocket;
-	private byte[] buffer = new byte[256];
-	private DatagramPacket packet;
+	private boolean timing = false;
 	
 	private final double FORWARD_50_INCHES_TIME = 1.5;
 	private final double PIVOT_90_DEGREES_TIME = 2.3;
 	private final double SLIDE_50_INCHES_TIME = 4.0;
 	
 	
+	//unused (permanently)
+	/*
+	private DatagramSocket dsocket;
+	private byte[] buffer = new byte[256];
+	private DatagramPacket packet;
+	*/	
 	
 	public AutoDrive(RobotCamera camera, SlideDrive slideDrive) {
 		this.camera = camera;
@@ -86,6 +89,8 @@ public class AutoDrive {
 		
 		
 		double[] times = new double[3];
+		
+		// Calculate times per 1 unit, multiply by actual distance
 		times[0] = Math.abs(forwardDistance * FORWARD_50_INCHES_TIME / 50);
 		times[1] = Math.abs(pivotDegrees * PIVOT_90_DEGREES_TIME / 90);
 		times[2] = Math.abs(slideDistance * SLIDE_50_INCHES_TIME / 50);
@@ -161,18 +166,33 @@ public class AutoDrive {
 		move(0, 0, 90);
 	}
 	
+	public void doFile(AutoMode mode) {
+		// TODO: actually get stuff from file
+		
+	}
 	
 	public void autoDrive() {
+		
+		// Check for which auto mode it is
 		if(!movedToAutoZone) {
 			switch(mode) {
 			case MOVE_TO_AUTO_ZONE:
-				simpleMoveToAuto();
+				if(timing)
+					simpleMoveToAuto();
+				else
+					doFile(AutoMode.MOVE_TO_AUTO_ZONE);
 				break;
 			case PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE:
-				timingMoveToAutoZone();
+				if(timing)
+					timingMoveToAutoZone();
+				else
+					doFile(AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE);
 				break;
 			default:
-				timingMoveToAutoZone();
+				if(timing)
+					timingMoveToAutoZone();
+				else
+					doFile(AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE);
 			}
 			movedToAutoZone = true;
 		}
