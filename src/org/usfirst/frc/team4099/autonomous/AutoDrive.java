@@ -117,7 +117,7 @@ public class AutoDrive {
 		// Into recycling bin
 		move(20, 0, 0);
 		// TODO: pick up bin
-		elevator.setHeight(1);
+		//elevator.setHeight(1);
 		// Out of recycling bin
 		move(-30, 0, 0);
 		
@@ -125,9 +125,9 @@ public class AutoDrive {
 		move(0, 28, 0);
 		move(17, 0, 0);
 		//TODO: place recycling bin
-		elevator.setHeight(.5);
+		//elevator.setHeight(.5);
 		move(-17, 0, 0);
-		elevator.setHeight(0);
+		//\elevator.setHeight(0);
 		// Move into auto zone
 		simpleMoveToAuto();
 	}
@@ -196,7 +196,7 @@ public class AutoDrive {
 		for(int i = 0; i < moves.size(); i++) {
 			slideDrive.slideDrive(moves.get(i)[0] / REDUCTION_FACTOR, -moves.get(i)[2] / REDUCTION_FACTOR, moves.get(i)[1]);
 			elevator.twoManOpHuman(moves.get(i)[3]);
-			Timer.delay(0.005);
+			Timer.delay(moves.get(i)[4] / 1000);
 		}
 		
 	}
@@ -205,6 +205,7 @@ public class AutoDrive {
 		
 		// Check for which auto mode it is
 		// Then, if it's supposed to do timing moving, do that
+		/*
 		if(!movedToAutoZone) {
 			switch(mode) {
 			case MOVE_TO_AUTO_ZONE:
@@ -227,5 +228,11 @@ public class AutoDrive {
 			}
 			movedToAutoZone = true;
 		}
+		*/
+		
+		slideDrive.slideDrive(1, 0, 0);
+		Timer.delay(5);
+		slideDrive.slideDrive(0,0,0);
+		//Timer.delay(10000);
 	}
 }
