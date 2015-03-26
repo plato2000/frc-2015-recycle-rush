@@ -36,17 +36,6 @@ public class AutoDrive {
 		this.camera = camera;
 		this.slideDrive = slideDrive;
 		
-		// Checks for autonomous mode
-		String modeString = SmartDashboard.getString("AutoMode");
-		if(modeString.equalsIgnoreCase("move")) {
-			this.mode = AutoMode.MOVE_TO_AUTO_ZONE;
-		} else if(modeString.equalsIgnoreCase("stack")) {
-			System.err.println("ye fewl what you mad be?");
-			this.mode = AutoMode.PICK_AND_STACK_TOTES_AND_MOVE_TO_AUTO_ZONE;
-		} else {
-			System.err.println("Defaulting to stack bin and tote and move");
-			this.mode = AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE;
-		}
 	}
 	
 	public void move(double forwardDistance, double pivotDegrees, double slideDistance) {
@@ -176,6 +165,17 @@ public class AutoDrive {
 	}
 	
 	public void doFile(AutoMode mode) {
+		// Checks for autonomous mode
+		String modeString = SmartDashboard.getString("AutoMode");
+		if(modeString.equalsIgnoreCase("move")) {
+			this.mode = AutoMode.MOVE_TO_AUTO_ZONE;
+		} else if(modeString.equalsIgnoreCase("stack")) {
+			System.err.println("ye fewl what you mad be?");
+			this.mode = AutoMode.PICK_AND_STACK_TOTES_AND_MOVE_TO_AUTO_ZONE;
+		} else {
+			System.err.println("Defaulting to stack bin and tote and move");
+			this.mode = AutoMode.PICK_UP_TOTE_AND_MOVE_TO_AUTO_ZONE;
+		}
 		// Figures out which file to use
 		String pathToFile = "";
 		switch(mode) {

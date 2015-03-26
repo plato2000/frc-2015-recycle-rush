@@ -41,7 +41,8 @@ public class Robot extends SampleRobot {
 		sendableChooser.addDefault("Tote and Bin", "moveBins");
 		sendableChooser.addObject("Move w/o Picking", "move");
 		sendableChooser.addObject("DO NOT USE", "stack");
-		SmartDashboard.putData("Auto Mode", sendableChooser);
+		SmartDashboard.putData("AutoMode", sendableChooser);
+		SmartDashboard.putString("PathToRecord", "");
 		SmartDashboard.putBoolean("isUsingPID?", false);
 		limitswitches.addToSmartDashboard();
 		// Create the driver object
